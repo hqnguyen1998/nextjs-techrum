@@ -28,7 +28,7 @@ handler.get(async (req, res) => {
     if (splitToken[0] !== 'Bearer') {
       return res.status(401).json({
         success: false,
-        msg: 'Invalid Token',
+        msg: 'Please sign in',
       });
     }
 
@@ -37,7 +37,7 @@ handler.get(async (req, res) => {
     if (!verifiedToken) {
       return res.status(401).json({
         success: false,
-        msg: 'Invalid Token',
+        msg: 'Please sign in',
       });
     }
 
@@ -130,7 +130,7 @@ handler.post(async (req, res) => {
 
       return res.status(200).json({
         success: true,
-        msg: 'Login successful',
+        msg: 'Login Sucessful',
         token: `Bearer ${token}`,
         data: userNameExisted,
       });

@@ -22,6 +22,10 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Password required'],
   },
+  accountType: {
+    type: String,
+    default: 'user',
+  },
   dob: {
     type: String,
   },

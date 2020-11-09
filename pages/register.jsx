@@ -1,10 +1,11 @@
-import { Formik, Form, Field } from 'formik';
-import { TextField, CheckboxWithLabel } from 'formik-material-ui';
-import { DatePicker } from 'formik-material-ui-pickers';
-import { Box, makeStyles, Paper, Typography, Button } from '@material-ui/core';
+import { useEffect } from 'react';
+import Router from 'next/router';
+import { useSelector } from 'react-redux';
+import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
 
 // Components
 import Layout from '../layouts/Layout';
+import RegisterForm from '../components/RegisterForm';
 
 const useStyles = makeStyles(() => ({
   titleText: {
@@ -16,6 +17,12 @@ const useStyles = makeStyles(() => ({
 const Register = () => {
   const classes = useStyles();
 
+  const isAuth = useSelector((state) => state.auth.isAuth);
+
+  useEffect(() => {
+    if (isAuth) return Router.push('/');
+  }, [isAuth]);
+
   return (
     <Layout title='Đăng ký'>
       <Typography variant='h5' className={classes.titleText}>
@@ -23,85 +30,24 @@ const Register = () => {
       </Typography>
       <br />
       <Box component={Paper} square p={2}>
-        <Formik
-          initialValues={{
-            username: '',
-            email: '',
-            password: '',
-            dob: new Date('03-22-1998'),
-            isAcceptPolicy: false,
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-
-              console.log(values);
-            }, 500);
-          }}
-        >
-          {({ submitForm, isSubmitting }) => (
-            <Form>
-              <Field
-                component={TextField}
-                name='username'
-                label='Username'
-                variant='outlined'
-                margin='dense'
-                fullWidth
-              />
-              <Field
-                type='text'
-                autoComplete='username'
-                component={TextField}
-                name='email'
-                label='Email Address'
-                variant='outlined'
-                margin='dense'
-                fullWidth
-              />
-              <Field
-                type='password'
-                autoComplete='current-password'
-                component={TextField}
-                name='password'
-                label='Password'
-                variant='outlined'
-                margin='dense'
-                fullWidth
-              />
-              <Field
-                component={DatePicker}
-                label='DOB'
-                name='dob'
-                variant='dialog'
-                inputVariant='outlined'
-                margin='dense'
-                fullWidth
-              />
-              <Field
-                component={CheckboxWithLabel}
-                type='checkbox'
-                name='isAcceptPolicy'
-                Label={{
-                  label: 'I accept with the policy and rules of Techrum',
-                }}
-              />
-              <br />
-              <br />
-              <Button
-                variant='contained'
-                color='secondary'
-                disabled={isSubmitting}
-                onClick={submitForm}
-              >
-                Register
-              </Button>
-            </Form>
-          )}
-        </Formik>
+        <RegisterForm />
       </Box>
     </Layout>
   );
+};
+
+export const getServerSideProps = ({ req, res }) => {
+  const token = req.cookies.token;
+
+  if (token) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+    return { props: {} };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Register;
