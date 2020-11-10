@@ -59,7 +59,14 @@ handler.post(async (req, res) => {
       body: body.content,
     };
 
-    const comment = await Comment.create(commentData);
+    let comment = await Comment.create(commentData);
+
+    comment = await comment
+      .populate({
+        path: 'author',
+        select: '-password',
+      })
+      .execPopulate();
 
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
@@ -78,7 +85,7 @@ handler.post(async (req, res) => {
       data: comment,
     });
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
     });
   }

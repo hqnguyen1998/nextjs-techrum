@@ -1,6 +1,6 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'react-moment';
-import useSWR from 'swr';
 import {
   Box,
   Paper,
@@ -10,6 +10,8 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+
+import { fetchPostComments } from '../redux/actions/commentActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,21 +32,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
 const PostCommentListContainer = ({ pid }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { data, error } = useSWR(`/api/comment?pid=${pid}`, fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data)
+  const { comments, isLoading } = useSelector((state) => state.comment);
+
+  React.useEffect(() => {
+    dispatch(fetchPostComments(pid));
+  }, []);
+
+  if (isLoading) {
     return Array.from({ length: 5 }, (v, i) => (
-      <Box key={i} mt={2}>
+      <Box key={i} mt={2} mb={2}>
         <Skeleton variant='rect' height={200} />
       </Box>
     ));
+  }
 
-  return data.data.map((comment) => (
+  return comments.map((comment) => (
     <Box key={comment._id} component={Paper} mt={2} p={2}>
       <Grid container spacing={1}>
         <Grid item xs={12} md={2} className={classes.root}>
