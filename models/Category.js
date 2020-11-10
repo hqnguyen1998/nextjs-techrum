@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
+import slug from 'mongoose-slug-updater';
 const Schema = mongoose.Schema;
+
+mongoose.plugin(slug);
 
 const CategorySchema = new Schema({
   title: {
@@ -8,10 +11,16 @@ const CategorySchema = new Schema({
     required: [true, 'Title Required'],
     unique: [true, 'Title is already existed'],
   },
-  subCategory: {
-    type: Schema.Types.ObjectId,
-    ref: 'SubCategory',
+  slug: {
+    type: String,
+    slug: 'title',
   },
+  subCategory: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'SubCategory',
+    },
+  ],
   created_date: {
     type: Date,
     default: Date.now,

@@ -29,6 +29,12 @@ const UserSchema = new Schema({
   dob: {
     type: String,
   },
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Post',
+    },
+  ],
   joined_date: {
     type: Date,
     default: Date.now,

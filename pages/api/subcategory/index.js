@@ -1,44 +1,41 @@
 import nextConnect from 'next-connect';
-import Category from '../../../models/Category';
 import middleware from '../../../middlewares/middleware';
+import Category from '../../../models/Category';
+import SubCategory from '../../../models/SubCategory';
 import authJWT from '../../../middlewares/authJWT';
 
 const handler = nextConnect();
 
 handler.use(middleware).use(authJWT);
 
-// @URL      /api/category
+// @URL      /api/subcategory
 // @Method   GET
-// @Desc     Get all categories with sub categories
+// @Desc     Get All Subcategories
 handler.get(async (req, res) => {
-  const query = req.query;
-
   try {
-    const categories = await Category.find({})
+    const subCategories = await SubCategory.find({})
       .populate({
-        path: 'subCategory',
-        populate: 'posts',
+        path: 'posts',
       })
       .sort({
-        created_date: query.sort,
+        created_date: req.query.sort,
       })
-      .limit(Number(query.limit));
+      .limit(parseInt(req.query.limit));
 
     res.status(200).json({
       success: true,
-      data: categories,
+      data: subCategories,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       success: false,
     });
   }
 });
 
-// @URL      /api/category
+// @URL      /api/subcategory
 // @Method   POST
-// @Desc     Create new category with user account admin type
+// @Desc     Create sub category in category with admin user
 handler.post(async (req, res) => {
   const user = req.user.accountType || undefined;
 
@@ -50,11 +47,17 @@ handler.post(async (req, res) => {
   }
 
   try {
-    const category = await Category.create({ ...req.body });
+    const subCategory = await SubCategory.create({ ...req.body });
+
+    await Category.findByIdAndUpdate(req.body.category, {
+      $push: {
+        subCategory: subCategory._id,
+      },
+    });
 
     res.status(200).json({
       success: true,
-      data: category,
+      data: subCategory,
     });
   } catch (error) {
     res.status(400).json({

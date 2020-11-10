@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-
+import '../models/SubCategory';
+import '../models/Category';
+import '../models/Post';
+import '../models/User';
 const uri = process.env.MONGO_URI;
 
 const connection = {}; /* creating connection object*/
@@ -15,6 +18,7 @@ async function dbConnect(req, res, next) {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   });
 
   connection.isConnected = db.connections[0].readyState;

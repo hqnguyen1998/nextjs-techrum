@@ -54,7 +54,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position='fixed' color='transparent'>
+    <AppBar position='fixed' color='inherit' elevation={0}>
       <Container maxWidth='lg'>
         <Toolbar>
           <Link href='/' as='/'>

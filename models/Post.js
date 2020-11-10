@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import slug from 'mongoose-slug-updater';
 const Schema = mongoose.Schema;
 
@@ -10,6 +10,10 @@ const PostSchema = new Schema({
     trim: true,
     required: [true, 'Title post required'],
   },
+  slug: {
+    type: String,
+    slug: 'title',
+  },
   content: {
     type: String,
   },
@@ -17,6 +21,22 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'SubCategory',
+  },
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   posted_date: {
     type: Date,
     default: Date.now,

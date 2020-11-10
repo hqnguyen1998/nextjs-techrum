@@ -23,6 +23,10 @@ const SubCategorySchema = new Schema({
       ref: 'Post',
     },
   ],
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+  },
   created_date: {
     type: Date,
     default: Date.now,
