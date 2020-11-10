@@ -2,6 +2,20 @@ import * as t from '../reducer/auth/authTypes';
 import fetch from 'isomorphic-unfetch';
 import Cookie from 'js-cookie';
 
+export const authUser = (data) => async (dispatch) => {
+  if (!data.success) {
+    return dispatch({
+      type: t.AUTH_USER_FAILED,
+      payload: data,
+    });
+  } else {
+    return dispatch({
+      type: t.AUTH_USER,
+      payload: data,
+    });
+  }
+};
+
 export const loginUser = (data) => async (dispatch) => {
   if (!data.success) {
     Cookie.remove('token');

@@ -1,21 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import useSWR from 'swr';
-import Link from 'next/link';
 import {
-  Avatar,
   Box,
   Button,
   makeStyles,
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableRow,
-  Typography,
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Skeleton } from '@material-ui/lab';
 import PaginationComponent from './Pagination';
+import PostListItem from './PostListItem';
 
 const useStyles = makeStyles((theme) => ({
   sortActions: {
@@ -30,6 +27,8 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 const PostListContainer = ({ categoryId, totalPosts }) => {
   const classes = useStyles();
 
+  const isAuth = useSelector((state) => state.auth.isAuth);
+
   const [limit, setLimit] = React.useState(10);
   const [page, setPage] = React.useState(1);
   const [sort, setSort] = React.useState('desc');
@@ -39,7 +38,6 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
     fetcher
   );
   if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
 
   const handleChangePage = (e, value) => {
     setPage(value);
@@ -47,55 +45,64 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
 
   return (
     <React.Fragment>
-      <Box mt={2} component={Paper}>
-        <div className={classes.sortActions}></div>
-        <TableContainer>
-          <Table>
-            <TableBody>
-              {data.data.map((post) => (
-                <TableRow key={post._id}>
-                  <TableCell>
-                    <Avatar src={post.author.avatar} />
-                  </TableCell>
-                  <TableCell>
-                    <Link href='/'>
-                      <a>
-                        <Typography
-                          variant='body1'
-                          align='justify'
-                          color='textPrimary'
-                        >
-                          {post.title}
-                        </Typography>
-                        <Typography variant='caption' color='textSecondary'>
-                          {post.author.username}
-                        </Typography>
-                      </a>
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <Typography variant='body1' color='textSecondary'>
-                        Lượt trả lời
-                      </Typography>
-                      <Typography variant='body1' color='textPrimary'>
-                        {post.comments.length}
-                      </Typography>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      <PaginationComponent
-        totalItems={totalPosts}
-        limitItem={limit}
-        currentPage={page}
-        handleChange={handleChangePage}
-        color='secondary'
-      />
+      {data ? (
+        <PaginationComponent
+          totalItems={totalPosts}
+          limitItem={limit}
+          currentPage={page}
+          handleChange={handleChangePage}
+          shape='rounded'
+          color='secondary'
+        >
+          <Button variant='contained' color='primary'>
+            {isAuth ? 'Đăng bài' : 'Đăng nhập để đăng bài viết'}
+          </Button>
+        </PaginationComponent>
+      ) : (
+        <React.Fragment>
+          <Skeleton variant='rect' animation='wave' height={50} />
+        </React.Fragment>
+      )}
+
+      {data ? (
+        <Box mt={2} component={Paper}>
+          <div className={classes.sortActions}></div>
+          <TableContainer>
+            <Table>
+              <TableBody>
+                {data.data.map((post) => (
+                  <PostListItem key={post._id} post={post} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      ) : (
+        <React.Fragment>
+          <Box mt={1} mb={1}>
+            <Skeleton variant='rect' height={500} />
+          </Box>
+        </React.Fragment>
+      )}
+
+      {data ? (
+        <PaginationComponent
+          totalItems={totalPosts}
+          limitItem={limit}
+          currentPage={page}
+          handleChange={handleChangePage}
+          shape='rounded'
+          color='secondary'
+        >
+          <Button variant='contained' color='primary'>
+            {isAuth ? 'Đăng bài' : 'Đăng nhập để đăng bài viết'}
+          </Button>
+        </PaginationComponent>
+      ) : (
+        <React.Fragment>
+          <Skeleton variant='rect' animation='wave' height={50} />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };

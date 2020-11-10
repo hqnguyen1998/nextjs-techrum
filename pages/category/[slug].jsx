@@ -1,7 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 // Layout
 import Layout from '../../layouts/Layout';
@@ -21,9 +21,6 @@ const CategoryPage = ({ data }) => {
         </Link>
       </Breadcrumb>
       <br />
-      <Button variant='contained' color='secondary' fullWidth>
-        Đăng bài
-      </Button>
 
       <PostListContainer categoryId={data._id} totalPosts={data.posts.length} />
     </Layout>

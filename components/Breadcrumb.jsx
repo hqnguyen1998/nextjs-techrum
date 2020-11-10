@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
 const Breadcrumb = ({ children }) => {
   const classes = useStyles();
   return (
-    <Box component={Paper} p={2}>
+    <Box component={Paper} p={2} mb={1}>
       <Breadcrumbs aria-label='breadcrumb' separator='›'>
-        <Link href='/' as='/'>
+        <Link href='/'>
           <a className={classes.link}>
             <Home className={classes.icon} color='primary' />
             <Typography color='textPrimary'>Diễn đàn</Typography>

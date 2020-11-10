@@ -8,15 +8,28 @@ const PaginationComponent = ({
   currentPage,
   handleChange,
   color,
+  children,
+  variant,
+  shape = 'rounded',
+  size,
 }) => {
   return (
-    <Box component={Paper} p={1} mt={1}>
+    <Box
+      component={Paper}
+      p={1}
+      mt={1}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Pagination
         count={Math.ceil(totalItems / limitItem)}
         page={currentPage}
         color={color}
+        shape={shape}
+        variant={variant}
         onChange={handleChange}
+        size={size}
       />
+      {children}
     </Box>
   );
 };
