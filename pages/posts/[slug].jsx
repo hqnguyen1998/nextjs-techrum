@@ -1,22 +1,63 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import Link from 'next/link';
 import {
+  Box,
+  Button,
   Card,
   CardActions,
   CardContent,
   IconButton,
+  Paper,
   Typography,
 } from '@material-ui/core';
 import { ThumbUp, ThumbDown } from '@material-ui/icons';
-import fetch from 'isomorphic-unfetch';
+import { fetcher } from '../../src/api-fetcher';
 
+import Cookie from 'js-cookie';
 // layouts
 import Layout from '../../layouts/Layout';
 // Components
 import Breadcrumb from '../../components/Breadcrumb';
 import PostCardHeader from '../../components/PostCardHeader';
+import PostCommentListContainer from '../../components/PostCommentListContainer';
+import TextEditor from '../../components/TextEditor';
 
 const Post = ({ post }) => {
+  const isAuth = useSelector((state) => state.auth.isAuth);
+  const { enqueueSnackbar } = useSnackbar();
+  const [content, setContent] = React.useState('');
+
+  const handleChangeValues = (value) => {
+    setContent(value);
+  };
+
+  const handleComment = async () => {
+    const data = await fetcher(`${process.env.API_URI}/api/comment`, {
+      method: 'POST',
+      headers: {
+        authorization: Cookie.get('token'),
+      },
+      body: JSON.stringify({
+        pid: post._id,
+        content: content,
+      }),
+    });
+
+    if (data.success) {
+      setContent('');
+      enqueueSnackbar('Bạn đã thêm 1 bình luận', {
+        variant: 'success',
+      });
+      return;
+    }
+
+    enqueueSnackbar('Lỗi! Không thể thêm bình luận', {
+      variant: 'error',
+    });
+  };
+
   return (
     <Layout title={post.title}>
       {/* Breadcrumb */}
@@ -35,6 +76,8 @@ const Post = ({ post }) => {
           {post.title}
         </Typography>
       </Breadcrumb>
+
+      {/* Post Content */}
       <Card>
         <PostCardHeader author={post.author} />
         <CardContent>
@@ -51,6 +94,22 @@ const Post = ({ post }) => {
           </IconButton>
         </CardActions>
       </Card>
+
+      {/* List Comments */}
+      <PostCommentListContainer pid={post._id} />
+
+      {/* Comments Editor */}
+      {isAuth ? (
+        <Box component={Paper} mt={2} p={2}>
+          <TextEditor value={content} setValue={handleChangeValues} />
+          <br />
+          <Button onClick={handleComment} variant='contained' color='primary'>
+            Đăng
+          </Button>
+        </Box>
+      ) : (
+        'Please login to comments on this post'
+      )}
     </Layout>
   );
 };

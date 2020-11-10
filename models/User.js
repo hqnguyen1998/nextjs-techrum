@@ -35,6 +35,12 @@ const UserSchema = new Schema({
       ref: 'Post',
     },
   ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   joined_date: {
     type: Date,
     default: Date.now,

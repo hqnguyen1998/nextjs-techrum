@@ -21,6 +21,7 @@
     "formik-material-ui-pickers": "0.0.11",
     "gravatar": "^1.8.1",
     "isomorphic-unfetch": "^3.1.0",
+    "jodit-react": "^1.0.66",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",

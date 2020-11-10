@@ -72,13 +72,15 @@ const Navbar = () => {
                 color='secondary'
                 onClick={handleOpen}
               >
-                Đăng nhập
+                <Typography>Đăng nhập</Typography>
               </Button>
-              <Link href='/register'>
-                <a>
-                  <Button startIcon={<PersonAddOutlined />}>Đăng ký</Button>
-                </a>
-              </Link>
+              <Button startIcon={<PersonAddOutlined />} color='primary'>
+                <Link href='/register'>
+                  <a>
+                    <Typography color='primary'>Đăng ký</Typography>
+                  </a>
+                </Link>
+              </Button>
             </ButtonGroup>
           ) : (
             <React.Fragment>

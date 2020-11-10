@@ -1,33 +1,28 @@
 import React from 'react';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
-import fetch from 'isomorphic-unfetch';
 import { Box, Container } from '@material-ui/core';
-
+import { fetcher } from '../src/api-fetcher';
 // Redux actions
 import { authUser } from '../redux/actions/authActions';
-
 // Cookie
 import Cookie from 'js-cookie';
-
 // Components
 import Navbar from '../components/Navbar';
+
+const token = Cookie.get('token');
 
 const Layout = ({ title, children }) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const token = Cookie.get('token');
-
     const fetchUser = async () => {
-      const response = await fetch(`${process.env.API_URI}/api/auth`, {
+      const data = await fetcher(`${process.env.API_URI}/api/auth`, {
         method: 'GET',
         headers: {
           Authorization: token,
         },
       });
-
-      const data = await response.json();
 
       dispatch(authUser(data));
     };
