@@ -14,7 +14,9 @@ const PostCommentListContainer = ({ pid }) => {
 
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  const { data, error } = useSWR(`/api/comment?pid=${pid}`, fetcher);
+  const { data, error } = useSWR(`/api/comment?pid=${pid}`, fetcher, {
+    refreshInterval: 1000,
+  });
   if (error) return <div>failed to load</div>;
   if (!data) {
     return Array.from({ length: 5 }, (v, i) => (
