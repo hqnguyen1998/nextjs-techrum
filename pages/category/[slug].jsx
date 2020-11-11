@@ -14,11 +14,7 @@ const CategoryPage = ({ data }) => {
     <Layout title={data.title}>
       <Breadcrumb>
         <Typography color='textPrimary'>{data.category.title}</Typography>
-        <Link href='/category/[slug]' as={`/category/${data.slug}`}>
-          <a>
-            <Typography color='textSecondary'>{data.title}</Typography>
-          </a>
-        </Link>
+        <Typography color='textSecondary'>{data.title}</Typography>
       </Breadcrumb>
       <br />
 
