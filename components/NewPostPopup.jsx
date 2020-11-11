@@ -55,6 +55,11 @@ const NewPostPopup = ({ open, onClose }) => {
       }),
     });
 
+    if (data.success) {
+      setTitle('');
+      setContent('');
+    }
+
     enqueueSnackbar(data.msg, {
       variant: data.success ? 'success' : 'error',
     });
