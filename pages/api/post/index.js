@@ -79,11 +79,13 @@ handler.post(async (req, res) => {
 
     res.status(200).json({
       success: true,
+      msg: 'Tạo bài viết thành công',
       data: post,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
+      msg: 'Tạo bài viết không thành công',
     });
   }
 });

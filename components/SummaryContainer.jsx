@@ -3,7 +3,7 @@ import { fetcher } from '../src/api-fetcher';
 import React from 'react';
 
 const SummaryContainer = () => {
-  const [totalPosts, setTotalPosts] = React.useState(0);
+  const [totalPosts, setTotalPosts] = React.useState(null);
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {

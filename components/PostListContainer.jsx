@@ -13,6 +13,7 @@ import {
 import { Skeleton } from '@material-ui/lab';
 import PaginationComponent from './Pagination';
 import PostListItem from './PostListItem';
+import NewPostPopup from './NewPostPopup';
 
 const useStyles = makeStyles((theme) => ({
   sortActions: {
@@ -29,6 +30,8 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
 
   const isAuth = useSelector((state) => state.auth.isAuth);
 
+  const [openNewPostDialog, setOpenNewPostDialog] = React.useState(false);
+
   const [limit, setLimit] = React.useState(10);
   const [page, setPage] = React.useState(1);
   const [sort, setSort] = React.useState('desc');
@@ -43,6 +46,14 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
     setPage(value);
   };
 
+  const handleOpenNewPost = () => {
+    setOpenNewPostDialog(true);
+  };
+
+  const handleCloseNewPost = () => {
+    setOpenNewPostDialog(false);
+  };
+
   return (
     <React.Fragment>
       {data ? (
@@ -54,9 +65,14 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
           shape='rounded'
           color='secondary'
         >
-          <Button variant='contained' color='primary'>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => isAuth && handleOpenNewPost()}
+          >
             {isAuth ? 'Đăng bài' : 'Đăng nhập để đăng bài viết'}
           </Button>
+          <NewPostPopup open={openNewPostDialog} onClose={handleCloseNewPost} />
         </PaginationComponent>
       ) : (
         <React.Fragment>

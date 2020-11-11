@@ -61,14 +61,15 @@ handler.get(async (req, res) => {
 // @Desc     Login user
 handler.post(async (req, res) => {
   const { emailOrUsername, password } = req.body;
+
   try {
     // Check if user or email existed
     const emailExisted = await User.findOne({
-      email: emailOrUsername,
+      email: emailOrUsername.toLowerCase(),
     });
 
     const userNameExisted = await User.findOne({
-      username: emailOrUsername,
+      username: emailOrUsername.toLowerCase(),
     });
 
     if (!emailExisted && !userNameExisted) {
