@@ -13,13 +13,17 @@ handler.use(middleware).use(authJWT);
 // @Method   GET
 // @Desc     Get all comments @ get comments by post id
 handler.get(async (req, res) => {
-  const { pid } = req.query;
+  const { pid, limit, page } = req.query;
+
   try {
     if (pid) {
-      const comments = await Comment.find({ post: pid }).populate({
-        path: 'author',
-        select: '-password',
-      });
+      const comments = await Comment.find({ post: pid })
+        .populate({
+          path: 'author',
+          select: '-password',
+        })
+        .limit(parseInt(limit))
+        .skip(parseInt(page));
 
       return res.status(200).json({
         success: true,

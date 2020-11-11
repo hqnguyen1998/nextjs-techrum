@@ -12,6 +12,30 @@ const handler = nextConnect();
 handler.use(middleware).use(authJWT);
 
 // @URL      /api/post
+// @Method   GET
+// @Desc     Search post by query
+handler.get(async (req, res) => {
+  const { q } = req.query;
+  try {
+    const posts = await Post.find({
+      title: {
+        $regex: q,
+        $options: 'ig',
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+    });
+  }
+});
+
+// @URL      /api/post
 // @Method   Post
 // @Desc     Create new post by user
 handler.post(async (req, res) => {

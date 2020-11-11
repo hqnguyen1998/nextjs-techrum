@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 import {
   Card,
   CardActions,
@@ -59,7 +59,10 @@ const Post = ({ post }) => {
       </Card>
 
       {/* List Comments */}
-      <PostCommentListContainer pid={post._id} />
+      <PostCommentListContainer
+        pid={post._id}
+        totalComments={post.comments.length}
+      />
 
       {/* Comments Editor */}
       {isAuth ? (

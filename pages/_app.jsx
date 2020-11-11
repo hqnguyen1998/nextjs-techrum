@@ -4,6 +4,7 @@ import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import theme from '../src/theme';
+import Navbar from '../components/Navbar';
 // Redux Store
 import { wrapper } from '../redux/store';
 // Global Css
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps }) {
       <CssBaseline />
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <SnackbarProvider maxSnack={3}>
+          <Navbar />
           <Component {...pageProps} />
         </SnackbarProvider>
       </MuiPickersUtilsProvider>

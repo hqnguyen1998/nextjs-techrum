@@ -1,28 +1,25 @@
 import React from 'react';
 import Head from 'next/head';
+import fetch from 'isomorphic-unfetch';
 import { useDispatch } from 'react-redux';
 import { Box, Container } from '@material-ui/core';
-import { fetcher } from '../src/api-fetcher';
-// Redux actions
 import { authUser } from '../redux/actions/authActions';
 // Cookie
 import Cookie from 'js-cookie';
-// Components
-import Navbar from '../components/Navbar';
-
-const token = Cookie.get('token');
 
 const Layout = ({ title, children }) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     const fetchUser = async () => {
-      const data = await fetcher(`${process.env.API_URI}/api/auth`, {
+      const response = await fetch(`${process.env.API_URI}/api/auth`, {
         method: 'GET',
         headers: {
-          Authorization: token,
+          Authorization: Cookie.get('token'),
         },
       });
+
+      const data = await response.json();
 
       dispatch(authUser(data));
     };
@@ -52,8 +49,6 @@ const Layout = ({ title, children }) => {
         <meta property='og:type' content='website' />
         <meta name='theme-color' content='#4f80b0' />
       </Head>
-
-      <Navbar />
 
       <Box mt={10} p={2}>
         <Container maxWidth='lg'>{children}</Container>

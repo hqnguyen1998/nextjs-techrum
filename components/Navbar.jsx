@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Router from 'next/router';
 import Link from 'next/link';
 import {
   AppBar,
@@ -10,12 +11,19 @@ import {
   Typography,
   Button,
   DialogContent,
+  IconButton,
+  Collapse,
+  InputBase,
+  Grow,
 } from '@material-ui/core';
-import { ExitToAppOutlined, PersonAddOutlined } from '@material-ui/icons';
+import {
+  ExitToAppOutlined,
+  PersonAddOutlined,
+  SearchOutlined,
+} from '@material-ui/icons';
 
 // Components
 import DialogContainer from '../components/DialogContainer';
-
 // Redux Actions
 import { signOut } from '../redux/actions/authActions';
 import LoginForm from './LoginForm';
@@ -38,12 +46,22 @@ const Navbar = () => {
 
   const { isAuth, user } = useSelector((state) => state.auth);
   const [openLogin, setOpenLogin] = React.useState(false);
+  const [openSearch, setOpenSearch] = React.useState(false);
+  const [searchText, setSearchText] = React.useState('');
 
   React.useEffect(() => {
     if (isAuth) {
       handleClose();
     }
   }, [isAuth]);
+
+  const handleSearchButton = () => {
+    if (searchText.length > 0) {
+      Router.push(`/search?q=${searchText}`);
+    } else {
+      setOpenSearch((prev) => !prev);
+    }
+  };
 
   const handleOpen = () => {
     setOpenLogin(true);
@@ -65,6 +83,19 @@ const Navbar = () => {
             </a>
           </Link>
           <div className={classes.root} />
+          <IconButton color='inherit' onClick={handleSearchButton}>
+            <SearchOutlined />
+          </IconButton>
+          {openSearch && (
+            <Grow in={openSearch}>
+              <InputBase
+                placeholder='Search'
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </Grow>
+          )}
+
           {!isAuth ? (
             <ButtonGroup variant='text' color='inherit'>
               <Button
