@@ -1,6 +1,5 @@
 import React from 'react';
 import fetch from 'isomorphic-unfetch';
-import Link from 'next/link';
 import { Typography } from '@material-ui/core';
 
 // Layout
@@ -16,7 +15,6 @@ const CategoryPage = ({ data }) => {
         <Typography color='textPrimary'>{data.category.title}</Typography>
         <Typography color='textSecondary'>{data.title}</Typography>
       </Breadcrumb>
-      <br />
 
       <PostListContainer categoryId={data._id} totalPosts={data.posts.length} />
     </Layout>

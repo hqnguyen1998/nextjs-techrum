@@ -10,7 +10,7 @@ const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 const getConfig = () => {
   let config = {
     readonly: false,
-    theme: 'dark',
+    theme: 'light',
   };
   return config;
 };

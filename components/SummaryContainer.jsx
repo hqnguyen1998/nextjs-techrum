@@ -1,6 +1,7 @@
 import { Box, Divider, Paper, Typography } from '@material-ui/core';
 import { fetcher } from '../src/api-fetcher';
 import React from 'react';
+import theme from '../src/theme';
 
 const SummaryContainer = () => {
   const [totalPosts, setTotalPosts] = React.useState(null);
@@ -35,15 +36,34 @@ const SummaryContainer = () => {
       <div style={{ marginTop: 10 }}>
         <Typography variant='body1' align='center' color='textSecondary'>
           Bài viết:{' '}
-          <span style={{ color: '#fff', fontWeight: 600 }}>{totalPosts}</span>
+          <span
+            style={{
+              color: theme.palette.primary.contrastText,
+              fontWeight: 800,
+            }}
+          >
+            {totalPosts}
+          </span>
         </Typography>
         <Typography variant='body1' align='center' color='textSecondary'>
           Thành viên:{' '}
-          <span style={{ color: '#fff', fontWeight: 600 }}>{users.length}</span>
+          <span
+            style={{
+              color: theme.palette.primary.contrastText,
+              fontWeight: 800,
+            }}
+          >
+            {users.length}
+          </span>
         </Typography>
         <Typography variant='body1' align='center' color='textSecondary'>
           Thành viên mới nhất:{' '}
-          <span style={{ color: '#fff', fontWeight: 600 }}>
+          <span
+            style={{
+              color: theme.palette.primary.contrastText,
+              fontWeight: 800,
+            }}
+          >
             {users.length > 0 ? users[users.length - 1].username : ''}
           </span>
         </Typography>

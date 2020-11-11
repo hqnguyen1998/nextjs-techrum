@@ -28,20 +28,19 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 const PostListContainer = ({ categoryId, totalPosts }) => {
   const classes = useStyles();
 
-  const isAuth = useSelector((state) => state.auth.isAuth);
-
-  const [openNewPostDialog, setOpenNewPostDialog] = React.useState(false);
-
-  const [limit, setLimit] = React.useState(10);
-  const [page, setPage] = React.useState(1);
-  const [sort, setSort] = React.useState('desc');
+  let limitPostsItem = 10;
+  let sort = 'desc';
 
   const { data, error } = useSWR(
-    `/api/post/${categoryId}?page=${page - 1}&limit=${limit}&sort=${sort}`,
+    `/api/post/${categoryId}?sort=${sort}`,
     fetcher,
     { refreshInterval: 1000 }
   );
   if (error) return <div>failed to load</div>;
+
+  const isAuth = useSelector((state) => state.auth.isAuth);
+  const [openNewPostDialog, setOpenNewPostDialog] = React.useState(false);
+  const [page, setPage] = React.useState(1);
 
   const handleChangePage = (e, value) => {
     setPage(value);
@@ -59,12 +58,11 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
     <React.Fragment>
       {data ? (
         <PaginationComponent
-          totalItems={totalPosts}
-          limitItem={limit}
+          totalItems={data.data.length}
+          limitItem={limitPostsItem}
           currentPage={page}
           handleChange={handleChangePage}
           shape='rounded'
-          color='secondary'
         >
           <Button
             variant='contained'
@@ -87,9 +85,11 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
           <TableContainer>
             <Table>
               <TableBody>
-                {data.data.map((post) => (
-                  <PostListItem key={post._id} post={post} />
-                ))}
+                {data.data
+                  .slice((page - 1) * limitPostsItem, limitPostsItem * page)
+                  .map((post) => (
+                    <PostListItem key={post._id} post={post} />
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -105,16 +105,11 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
       {data ? (
         <PaginationComponent
           totalItems={totalPosts}
-          limitItem={limit}
+          limitItem={limitPostsItem}
           currentPage={page}
           handleChange={handleChangePage}
           shape='rounded'
-          color='secondary'
-        >
-          <Button variant='contained' color='primary'>
-            {isAuth ? 'Đăng bài' : 'Đăng nhập để đăng bài viết'}
-          </Button>
-        </PaginationComponent>
+        />
       ) : (
         <React.Fragment>
           <Skeleton variant='rect' animation='wave' height={50} />

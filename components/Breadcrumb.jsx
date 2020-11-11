@@ -24,7 +24,12 @@ const Breadcrumb = ({ children }) => {
   const classes = useStyles();
   return (
     <Box component={Paper} p={2} mb={1}>
-      <Breadcrumbs aria-label='breadcrumb' separator='›'>
+      <Breadcrumbs
+        component='nav'
+        maxItems={2}
+        aria-label='breadcrumb'
+        separator='›'
+      >
         <Link href='/'>
           <a className={classes.link}>
             <Home className={classes.icon} color='primary' />

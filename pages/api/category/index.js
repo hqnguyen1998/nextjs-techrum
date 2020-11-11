@@ -17,7 +17,13 @@ handler.get(async (req, res) => {
     const categories = await Category.find({})
       .populate({
         path: 'subCategory',
-        populate: 'posts',
+        populate: {
+          path: 'posts',
+          populate: {
+            path: 'author',
+            select: '-password',
+          },
+        },
       })
       .sort({
         created_date: query.sort,

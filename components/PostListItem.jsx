@@ -1,17 +1,40 @@
 import React from 'react';
 import Link from 'next/link';
-import { TableRow, TableCell, Avatar, Typography } from '@material-ui/core';
+import {
+  TableRow,
+  TableCell,
+  Avatar,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  titleText: {
+    fontWeight: 600,
+  },
+  totalText: {
+    fontWeight: 800,
+    color: theme.palette.text.primary,
+  },
+}));
 
 const PostListItem = ({ post }) => {
+  const classes = useStyles();
+
   return (
     <TableRow key={post._id}>
       <TableCell>
-        <Avatar src={post.author.avatar} />
+        <Avatar src={post.author.avatar} alt={post.author.username} />
       </TableCell>
       <TableCell>
         <Link href='/posts/[slug]' as={`/posts/${post.slug}.${post._id}`}>
           <a>
-            <Typography variant='body1' align='justify' color='textPrimary'>
+            <Typography
+              variant='body1'
+              align='justify'
+              color='textPrimary'
+              className={classes.titleText}
+            >
               {post.title}
             </Typography>
             <Typography variant='caption' color='textSecondary'>
@@ -21,12 +44,10 @@ const PostListItem = ({ post }) => {
         </Link>
       </TableCell>
       <TableCell>
-        <div>
+        <div style={{ display: 'flex' }}>
           <Typography variant='body1' color='textSecondary'>
-            Lượt trả lời
-          </Typography>
-          <Typography variant='body1' color='textPrimary'>
-            {post.comments.length}
+            Lượt trả lời:{' '}
+            <span className={classes.totalText}>{post.comments.length}</span>
           </Typography>
         </div>
       </TableCell>
