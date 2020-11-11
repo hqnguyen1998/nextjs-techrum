@@ -38,7 +38,8 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
 
   const { data, error } = useSWR(
     `/api/post/${categoryId}?page=${page - 1}&limit=${limit}&sort=${sort}`,
-    fetcher
+    fetcher,
+    { refreshInterval: 1000 }
   );
   if (error) return <div>failed to load</div>;
 
