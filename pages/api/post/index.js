@@ -17,12 +17,21 @@ handler.use(middleware).use(authJWT);
 handler.get(async (req, res) => {
   const { q } = req.query;
   try {
-    const posts = await Post.find({
-      title: {
-        $regex: q,
-        $options: 'ig',
-      },
-    });
+    if (q) {
+      const posts = await Post.find({
+        title: {
+          $regex: q,
+          $options: 'ig',
+        },
+      });
+
+      return res.status(200).json({
+        success: true,
+        data: posts,
+      });
+    }
+
+    const posts = await Post.find({});
 
     res.status(200).json({
       success: true,
