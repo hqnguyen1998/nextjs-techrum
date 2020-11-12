@@ -20,6 +20,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     fontWeight: 600,
   },
+  accountType: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#fdc22d',
+    width: '150px',
+    borderRadius: '2px',
+  },
+  accountTypeText: {
+    fontWeight: 800,
+    textTransform: 'capitalize',
+  },
 }));
 
 const PostCardHeader = ({ author }) => {
@@ -40,11 +51,26 @@ const PostCardHeader = ({ author }) => {
               Bài viết:{' '}
               <span className={classes.actionText}>{author.posts.length}</span>
             </Typography>
+            <Typography variant='subtitle1' color='textSecondary'>
+              Bình luận:{' '}
+              <span className={classes.actionText}>
+                {author.comments.length}
+              </span>
+            </Typography>
           </Box>
         </Hidden>
       }
       title={author.username}
-      subheader={author.email}
+      subheader={
+        <div>
+          <Typography variant='caption'>{author.email}</Typography>
+          <Box component='div' p={0.5} className={classes.accountType}>
+            <Typography color='textPrimary' className={classes.accountTypeText}>
+              {author.accountType}
+            </Typography>
+          </Box>
+        </div>
+      }
       classes={{
         title: classes.titleText,
       }}

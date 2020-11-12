@@ -44,6 +44,82 @@ handler.get(async (req, res) => {
   }
 });
 
+// @URL      /api/post?pid=[id]
+// @Method   PUT
+// @Desc     Add Like to post
+handler.put(async (req, res) => {
+  const { pid } = req.query;
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      msg: 'Non-Authorization',
+    });
+  }
+
+  try {
+    const existedLike = await Post.findOne({
+      _id: pid,
+      likes: {
+        $in: req.user._id,
+      },
+    });
+
+    if (existedLike) {
+      return res.status(400).json({
+        success: false,
+        msg: 'Người dùng đã thích bài viết',
+      });
+    }
+
+    await Post.findByIdAndUpdate(pid, {
+      $push: {
+        likes: req.user._id,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: 'Bạn đã thích bài viết này',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      msg: 'Lỗi',
+    });
+  }
+});
+
+// @URL      /api/post?pid=[id]
+// @Method   DELETE
+// @Desc     Remove Like to post
+handler.delete(async (req, res) => {
+  const { pid } = req.query;
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      msg: 'Non-Authorization',
+    });
+  }
+
+  try {
+    await Post.findByIdAndUpdate(pid, {
+      $pull: {
+        likes: req.user._id,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: 'Bạn đã bỏ thích bài viết này',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      msg: 'Lỗi',
+    });
+  }
+});
+
 // @URL      /api/post
 // @Method   Post
 // @Desc     Create new post by user

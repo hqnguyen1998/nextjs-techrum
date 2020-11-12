@@ -20,6 +20,7 @@
     "formik-material-ui": "^3.0.0",
     "formik-material-ui-pickers": "0.0.11",
     "gravatar": "^1.8.1",
+    "html-react-parser": "^0.14.1",
     "isomorphic-unfetch": "^3.1.0",
     "jodit-react": "^1.0.66",
     "js-cookie": "^2.2.1",

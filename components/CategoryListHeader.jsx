@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   categoryText: {
     fontWeight: 600,
     backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.common.white,
     padding: 5,
     width: '55%',
   },

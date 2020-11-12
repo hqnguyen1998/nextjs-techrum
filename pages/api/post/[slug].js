@@ -41,6 +41,22 @@ handler.get(async (req, res) => {
 });
 
 // @URL      /api/post/:slug
+// @Method   PUT
+// @Desc     edit Post
+handler.put(async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      msg: 'Lỗi',
+    });
+  }
+});
+
+// @URL      /api/post/:slug
 // @Method   DELETE
 // @Desc     delete post id
 handler.delete(async (req, res) => {

@@ -14,6 +14,12 @@ handler.get(async (req, res) => {
   try {
     const post = await Post.findOne({ _id: pid, slug: slug })
       .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+        },
+      })
+      .populate({
         path: 'author',
         select: '-password',
       })

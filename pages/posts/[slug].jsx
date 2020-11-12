@@ -1,72 +1,90 @@
 import React from 'react';
 import Link from 'next/link';
+import useSWR from 'swr';
 import { useSelector } from 'react-redux';
-import {
-  Card,
-  CardActions,
-  CardContent,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
-import { ThumbUp, ThumbDown } from '@material-ui/icons';
+import { Box, Typography } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 
 // layouts
 import Layout from '../../layouts/Layout';
 // Components
 import Breadcrumb from '../../components/Breadcrumb';
-import PostCardHeader from '../../components/PostCardHeader';
 import PostCommentListContainer from '../../components/PostCommentListContainer';
 import TextEditor from '../../components/TextEditor';
+import SinglePostContent from '../../components/SinglePostContent';
 
-const Post = ({ post }) => {
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+const Post = ({ title, slug }) => {
   const isAuth = useSelector((state) => state.auth.isAuth);
 
+  const { data, error } = useSWR(
+    `${process.env.API_URI}/api/post/${slug[0]}/${slug[1]}`,
+    fetcher,
+    {
+      refreshInterval: 1000,
+      revalidateOnReconnect: true,
+      revalidateOnFocus: true,
+    }
+  );
+  if (error) return <div>failed to load</div>;
+
   return (
-    <Layout title={post.title}>
+    <Layout title={title}>
       {/* Breadcrumb */}
-      <Breadcrumb>
-        <Typography color='textPrimary'>
-          {post.category.category.title}
-        </Typography>
-        <Link href='/category/[slug]' as={`/category/${post.category.slug}`}>
-          <a>
-            <Typography color='textPrimary' noWrap>
-              {post.category.title}
-            </Typography>
-          </a>
-        </Link>
-        <Typography color='textSecondary' noWrap>
-          {post.title}
-        </Typography>
-      </Breadcrumb>
+      {data ? (
+        <Breadcrumb>
+          <Typography color='textPrimary'>
+            {data.data.category.category.title}
+          </Typography>
+          <Link
+            href='/category/[slug]'
+            as={`/category/${data.data.category.slug}`}
+          >
+            <a>
+              <Typography color='textPrimary' noWrap>
+                {data.data.category.title}
+              </Typography>
+            </a>
+          </Link>
+          <Typography color='textSecondary' noWrap>
+            {data.data.title}
+          </Typography>
+        </Breadcrumb>
+      ) : (
+        <Box mt={2}>
+          <Skeleton variant='rect' height={65} />
+        </Box>
+      )}
 
       {/* Post Content */}
-      <Card>
-        <PostCardHeader author={post.author} />
-        <CardContent>
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
-        </CardContent>
-        <CardActions
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <IconButton>
-            <ThumbUp />
-          </IconButton>
-        </CardActions>
-      </Card>
+      {data ? (
+        <SinglePostContent
+          author={data.data.author}
+          content={data.data.content}
+          likes={data.data.likes}
+          pid={data.data._id}
+        />
+      ) : (
+        <Box mt={2}>
+          <Skeleton variant='rect' height={500} />
+        </Box>
+      )}
 
       {/* List Comments */}
-      <PostCommentListContainer
-        pid={post._id}
-        totalComments={post.comments.length}
-      />
+      {data ? (
+        <PostCommentListContainer comments={data.data.comments} />
+      ) : (
+        Array.from({ length: 5 }, (v, i) => (
+          <Box key={i} mt={2}>
+            <Skeleton variant='rect' height={65} />
+          </Box>
+        ))
+      )}
 
       {/* Comments Editor */}
-      {isAuth ? (
-        <TextEditor pid={post._id} />
+      {isAuth && data ? (
+        <TextEditor pid={data.data._id} />
       ) : (
         <Typography variant='body1'>
           Please login for your first comment
@@ -95,7 +113,8 @@ export const getServerSideProps = async ({ params, res }) => {
 
   return {
     props: {
-      post: data.data,
+      title: data.data.title,
+      slug: splitSlug,
     },
   };
 };
