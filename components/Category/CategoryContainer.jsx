@@ -11,7 +11,7 @@ import { Skeleton } from '@material-ui/lab';
 import fetch from 'isomorphic-unfetch';
 import useSWR from 'swr';
 // Components
-import CategoryListItem from './CategoryListItem';
+import CategoryCardList from './CategoryCardList';
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -23,7 +23,7 @@ const CategoryContainer = () => {
     <React.Fragment>
       {data ? (
         data.data.map((data) => (
-          <CategoryListItem
+          <CategoryCardList
             key={data._id}
             title={data.title}
             subCategories={data.subCategory}

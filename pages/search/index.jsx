@@ -3,14 +3,15 @@ import fetch from 'isomorphic-unfetch';
 import { useRouter } from 'next/router';
 import {
   Box,
-  InputBase,
   makeStyles,
   Paper,
   Table,
   TableBody,
   TableContainer,
 } from '@material-ui/core';
+// Components
 import Layout from '../../layouts/Layout';
+import SearchInput from '../../components/Search/SearchInput';
 import PostListItem from '../../components/PostListItem';
 
 const useStyles = makeStyles(() => ({
@@ -43,15 +44,19 @@ const SearchPage = () => {
     fetchPosts();
   }, [search]);
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <Layout title='Search'>
       <Box component={Paper} p={2} mb={2}>
-        <InputBase
+        <SearchInput
           placeholder='Search'
           fullWidth
           autoFocus
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearch}
           classes={{
             input: classes.input,
           }}

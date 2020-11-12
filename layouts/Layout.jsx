@@ -1,51 +1,25 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Head from 'next/head';
-import fetch from 'isomorphic-unfetch';
-import { useDispatch } from 'react-redux';
 import { Box, Container } from '@material-ui/core';
-import { authUser } from '../redux/actions/authActions';
-// Cookie
-import Cookie from 'js-cookie';
 
 const Layout = ({ title, children }) => {
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch(`${process.env.API_URI}/api/auth`, {
-        method: 'GET',
-        headers: {
-          Authorization: Cookie.get('token'),
-        },
-      });
-
-      const data = await response.json();
-
-      dispatch(authUser(data));
-    };
-
-    fetchUser();
-  }, []);
+  const { config, isLoading } = useSelector((state) => state.config);
 
   return (
     <React.Fragment>
       <Head>
-        <title>{title} | TECHRUM</title>
+        <title>
+          {!isLoading && title
+            ? `${title} | ${config.pageTitle || ''}`
+            : config.pageTitle || ''}
+        </title>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=Edge' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <meta
-          name='description'
-          content='Diễn đàn công nghệ hàng đầu Việt Nam'
-        />
-        <meta
-          property='og:description'
-          content='Diễn đàn công nghệ hàng đầu Việt Nam'
-        />
-        <meta
-          property='twitter:description'
-          content='Diễn đàn công nghệ hàng đầu Việt Nam'
-        />
+        <meta name='description' content={config.pageMeta} />
+        <meta property='og:description' content={config.pageMeta} />
+        <meta property='twitter:description' content={config.pageMeta} />
         <meta property='og:type' content='website' />
         <meta name='theme-color' content='#4f80b0' />
       </Head>

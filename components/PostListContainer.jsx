@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const PostListContainer = ({ categoryId, totalPosts }) => {
+const PostListContainer = ({ categoryId }) => {
   const classes = useStyles();
 
   let limitPostsItem = 10;
@@ -104,7 +104,7 @@ const PostListContainer = ({ categoryId, totalPosts }) => {
 
       {data ? (
         <PaginationComponent
-          totalItems={totalPosts}
+          totalItems={data.data.length}
           limitItem={limitPostsItem}
           currentPage={page}
           handleChange={handleChangePage}

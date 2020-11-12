@@ -26,7 +26,7 @@ const NewPostPopup = ({ open, onClose }) => {
 
   let config = {
     readonly: false,
-    theme: 'dark',
+    theme: 'light',
   };
 
   React.useEffect(() => {

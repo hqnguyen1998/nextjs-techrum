@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
 import Router from 'next/router';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
 
 // Components
 import Layout from '../layouts/Layout';
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from '../components/Register/RegisterForm';
 
 const useStyles = makeStyles(() => ({
   titleText: {

@@ -6,10 +6,10 @@ import { DatePicker } from 'formik-material-ui-pickers';
 import { Button } from '@material-ui/core';
 
 // Redux actions
-import { registerUser } from '../redux/actions/authActions';
+import { registerUser } from '../../redux/actions/authActions';
 
 // Validation
-import { registerValidation } from '../src/validationForm';
+import { registerValidation } from '../../src/validationForm';
 
 const RegisterForm = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -21,7 +21,7 @@ const RegisterForm = () => {
         username: '',
         email: '',
         password: '',
-        dob: new Date('03-22-1998'),
+        dob: new Date(),
         isAcceptPolicy: false,
       }}
       validate={registerValidation}

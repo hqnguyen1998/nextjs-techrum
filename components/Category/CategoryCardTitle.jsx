@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CategoryListHeader = ({ title, toggleShow, handleToggle }) => {
+const CategoryCardTitle = ({ title, toggleShow, handleToggle }) => {
   const classes = useStyles();
 
   return (
@@ -37,4 +37,4 @@ const CategoryListHeader = ({ title, toggleShow, handleToggle }) => {
   );
 };
 
-export default CategoryListHeader;
+export default CategoryCardTitle;

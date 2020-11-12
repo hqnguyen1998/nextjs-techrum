@@ -1,9 +1,10 @@
-import { Box, Collapse, Grid, Paper } from '@material-ui/core';
 import React from 'react';
-import CategoryList from './CategoryList';
-import CategoryListHeader from './CategoryListHeader';
+import { Collapse, Grid } from '@material-ui/core';
+// Components
+import CategoryCardTitle from './CategoryCardTitle';
+import CategoryCardItems from './CategoryCardItems';
 
-const CategoryListItem = ({ title, subCategories }) => {
+const CategoryCardList = ({ title, subCategories }) => {
   const [toggle, setToggle] = React.useState(true);
 
   const handleToggleCategory = () => {
@@ -12,7 +13,7 @@ const CategoryListItem = ({ title, subCategories }) => {
 
   return (
     <React.Fragment>
-      <CategoryListHeader
+      <CategoryCardTitle
         title={title}
         toggleShow={toggle}
         handleToggle={handleToggleCategory}
@@ -22,7 +23,7 @@ const CategoryListItem = ({ title, subCategories }) => {
         <Grid container spacing={1}>
           {subCategories.map((data) => (
             <Grid key={data._id} item xs={12} sm={6} md={4}>
-              <CategoryList data={data} />
+              <CategoryCardItems data={data} />
             </Grid>
           ))}
         </Grid>
@@ -32,4 +33,4 @@ const CategoryListItem = ({ title, subCategories }) => {
   );
 };
 
-export default CategoryListItem;
+export default CategoryCardList;

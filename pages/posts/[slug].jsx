@@ -15,11 +15,10 @@ import SinglePostContent from '../../components/SinglePostContent';
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-const Post = ({ title, slug }) => {
-  const isAuth = useSelector((state) => state.auth.isAuth);
-
+const Post = ({ title, pid, slug }) => {
+  const { isAuth } = useSelector((state) => state.auth);
   const { data, error } = useSWR(
-    `${process.env.API_URI}/api/post/${slug[0]}/${slug[1]}`,
+    `${process.env.API_URI}/api/post/${slug}/${pid}`,
     fetcher,
     {
       refreshInterval: 1000,
@@ -94,28 +93,27 @@ const Post = ({ title, slug }) => {
   );
 };
 
-export const getServerSideProps = async ({ params, res }) => {
-  const { slug } = params;
-  const splitSlug = slug.split('.');
+Post.getInitialProps = async (ctx) => {
+  const { query, res } = ctx;
+  const splitSlug = query.slug.split('.');
 
   const response = await fetch(
     `${process.env.API_URI}/api/post/${splitSlug[0]}/${splitSlug[1]}`
   );
 
-  const data = await response.json();
+  const { success, data } = await response.json();
 
-  if (!data.success) {
+  if (!success) {
     res.setHeader('location', '/');
     res.statusCode = 302;
     res.end();
-    return { props: {} };
+    return {};
   }
 
   return {
-    props: {
-      title: data.data.title,
-      slug: splitSlug,
-    },
+    title: data.title,
+    slug: data.slug,
+    pid: data._id,
   };
 };
 
