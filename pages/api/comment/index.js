@@ -86,11 +86,13 @@ handler.post(async (req, res) => {
 
     res.status(200).json({
       success: true,
+      msg: 'Bạn đã thêm một bình luận thành công',
       data: comment,
     });
   } catch (error) {
     return res.status(400).json({
       success: false,
+      msg: 'Lỗi! hãy thử lại',
     });
   }
 });

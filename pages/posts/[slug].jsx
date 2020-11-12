@@ -4,21 +4,22 @@ import useSWR from 'swr';
 import { useSelector } from 'react-redux';
 import { Box, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-
+// Config
+import { API_POST_ROUTE } from '../../config/config.json';
 // layouts
 import Layout from '../../layouts/Layout';
 // Components
 import Breadcrumb from '../../components/Breadcrumb';
 import PostCommentListContainer from '../../components/PostCommentListContainer';
-import TextEditor from '../../components/TextEditor';
 import SinglePostContent from '../../components/SinglePostContent';
+import CommentContainer from '../../components/Comment/CommentContainer';
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const Post = ({ title, pid, slug }) => {
   const { isAuth } = useSelector((state) => state.auth);
   const { data, error } = useSWR(
-    `${process.env.API_URI}/api/post/${slug}/${pid}`,
+    `${process.env.API_URI}${API_POST_ROUTE}/${slug}/${pid}`,
     fetcher,
     {
       refreshInterval: 1000,
@@ -83,7 +84,7 @@ const Post = ({ title, pid, slug }) => {
 
       {/* Comments Editor */}
       {isAuth && data ? (
-        <TextEditor pid={data.data._id} />
+        <CommentContainer pid={pid} />
       ) : (
         <Typography variant='body1'>
           Please login for your first comment
@@ -93,27 +94,30 @@ const Post = ({ title, pid, slug }) => {
   );
 };
 
-Post.getInitialProps = async (ctx) => {
-  const { query, res } = ctx;
-  const splitSlug = query.slug.split('.');
+export const getServerSideProps = async ({ params, res }) => {
+  const splitSlug = params.slug.split('.');
 
   const response = await fetch(
-    `${process.env.API_URI}/api/post/${splitSlug[0]}/${splitSlug[1]}`
+    `${process.env.API_URI}${API_POST_ROUTE}/${splitSlug[0]}/${splitSlug[1]}`
   );
 
   const { success, data } = await response.json();
 
   if (!success) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
-    return {};
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
   }
 
   return {
-    title: data.title,
-    slug: data.slug,
-    pid: data._id,
+    props: {
+      title: data.title,
+      slug: data.slug,
+      pid: data._id,
+    },
   };
 };
 

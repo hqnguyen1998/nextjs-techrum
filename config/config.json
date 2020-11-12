@@ -1,0 +1,7 @@
+{
+    "post_limit": 10,
+    "post_sort": "desc",
+    "API_POST_ROUTE": "/api/post",
+    "API_SUBCATEGORY_ROUTE": "/api/subcategory",
+    "API_USER_ROUTE": "/api/user"
+}

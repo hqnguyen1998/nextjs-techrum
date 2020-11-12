@@ -9,6 +9,8 @@ import {
   TableBody,
   TableContainer,
 } from '@material-ui/core';
+// Config
+import { API_POST_ROUTE } from '../../config/config.json';
 // Components
 import Layout from '../../layouts/Layout';
 import SearchInput from '../../components/Search/SearchInput';
@@ -33,7 +35,7 @@ const SearchPage = () => {
   React.useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch(
-        `${process.env.API_URI}/api/post?q=${search}`
+        `${process.env.API_URI}${API_POST_ROUTE}?q=${search}`
       );
 
       const data = await response.json();

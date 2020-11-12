@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import useSWR from 'swr';
+import { useRouter } from 'next/router';
 import {
   Box,
   Button,
@@ -11,9 +12,12 @@ import {
   TableContainer,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+// Config
+import config from '../config/config.json';
+
+// Components
 import PaginationComponent from './Pagination';
 import PostListItem from './PostListItem';
-import NewPostPopup from './NewPostPopup';
 
 const useStyles = makeStyles((theme) => ({
   sortActions: {
@@ -26,32 +30,28 @@ const useStyles = makeStyles((theme) => ({
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const PostListContainer = ({ categoryId }) => {
+  const { post_limit, post_sort, API_POST_ROUTE } = config;
+  const router = useRouter();
   const classes = useStyles();
 
-  let limitPostsItem = 10;
-  let sort = 'desc';
-
   const { data, error } = useSWR(
-    `/api/post/${categoryId}?sort=${sort}`,
+    `${API_POST_ROUTE}/${categoryId}?sort=${post_sort}`,
     fetcher,
-    { refreshInterval: 1000 }
+    {
+      refreshInterval: 1000,
+    }
   );
   if (error) return <div>failed to load</div>;
 
   const isAuth = useSelector((state) => state.auth.isAuth);
-  const [openNewPostDialog, setOpenNewPostDialog] = React.useState(false);
   const [page, setPage] = React.useState(1);
 
   const handleChangePage = (e, value) => {
     setPage(value);
   };
 
-  const handleOpenNewPost = () => {
-    setOpenNewPostDialog(true);
-  };
-
-  const handleCloseNewPost = () => {
-    setOpenNewPostDialog(false);
+  const handleRedirectNewPost = () => {
+    router.push(`${router.asPath}/new`);
   };
 
   return (
@@ -59,19 +59,20 @@ const PostListContainer = ({ categoryId }) => {
       {data ? (
         <PaginationComponent
           totalItems={data.data.length}
-          limitItem={limitPostsItem}
+          limitItem={post_limit}
           currentPage={page}
           handleChange={handleChangePage}
           shape='rounded'
         >
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={() => isAuth && handleOpenNewPost()}
-          >
-            {isAuth ? 'Đăng bài' : 'Đăng nhập để đăng bài viết'}
-          </Button>
-          <NewPostPopup open={openNewPostDialog} onClose={handleCloseNewPost} />
+          {isAuth && (
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={handleRedirectNewPost}
+            >
+              Đăng tin/ bài
+            </Button>
+          )}
         </PaginationComponent>
       ) : (
         <React.Fragment>
@@ -86,7 +87,7 @@ const PostListContainer = ({ categoryId }) => {
             <Table>
               <TableBody>
                 {data.data
-                  .slice((page - 1) * limitPostsItem, limitPostsItem * page)
+                  .slice((page - 1) * post_limit, post_limit * page)
                   .map((post) => (
                     <PostListItem key={post._id} post={post} />
                   ))}
@@ -105,7 +106,7 @@ const PostListContainer = ({ categoryId }) => {
       {data ? (
         <PaginationComponent
           totalItems={data.data.length}
-          limitItem={limitPostsItem}
+          limitItem={post_limit}
           currentPage={page}
           handleChange={handleChangePage}
           shape='rounded'

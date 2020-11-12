@@ -37,14 +37,17 @@ const Register = () => {
 };
 
 export const getServerSideProps = ({ req, res }) => {
-  const token = req.cookies.token;
+  const state = req.__nextReduxWrapperStore.getState();
 
-  if (token) {
-    res.setHeader('location', '/');
-    res.statusCode = 302;
-    res.end();
-    return { props: {} };
+  if (state.auth.isAuth) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
   }
+
   return {
     props: {},
   };

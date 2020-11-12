@@ -4,10 +4,10 @@ import { Formik, Form, Field } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import { Button } from '@material-ui/core';
-
+// Config
+import { API_USER_ROUTE } from '../../config/config.json';
 // Redux actions
 import { registerUser } from '../../redux/actions/authActions';
-
 // Validation
 import { registerValidation } from '../../src/validationForm';
 
@@ -29,13 +29,16 @@ const RegisterForm = () => {
         setTimeout(async () => {
           setSubmitting(false);
 
-          const response = await fetch(`${process.env.API_URI}/api/user`, {
-            method: 'POST',
-            headers: {
-              'Content-type': 'application/json',
-            },
-            body: JSON.stringify(values),
-          });
+          const response = await fetch(
+            `${process.env.API_URI}${API_USER_ROUTE}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-type': 'application/json',
+              },
+              body: JSON.stringify(values),
+            }
+          );
 
           const data = await response.json();
 
