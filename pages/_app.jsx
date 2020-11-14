@@ -29,11 +29,11 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  console.log(store);
+  const getTheme = theme(config.theme);
 
   return (
     <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
-      <ThemeProvider theme={theme(config.theme)}>
+      <ThemeProvider theme={getTheme}>
         <CssBaseline />
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <SnackbarProvider maxSnack={3}>
