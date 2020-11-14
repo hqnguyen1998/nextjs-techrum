@@ -1,6 +1,10 @@
 export const registerValidation = (values) => {
   const error = {};
 
+  if (!values.fullName) {
+    error.fullName = 'Required';
+  }
+
   if (!values.username) {
     error.username = 'Required';
   } else if (!/^[a-zA-Z0-9_]{5,}[a-zA-Z]+[0-9]*$/.test(values.username)) {

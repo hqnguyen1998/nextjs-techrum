@@ -8,10 +8,10 @@ import { fetchMemberProfile } from '../../redux/actions/memberActions';
 import Layout from '../../layouts/Layout';
 import UserProfileContainer from '../../components/UserProfile/UserProfileContainer';
 
-const ProfilePage = ({ username, id }) => {
+const ProfilePage = ({ username }) => {
   return (
     <Layout title={username}>
-      <UserProfileContainer id={id} />
+      <UserProfileContainer />
     </Layout>
   );
 };

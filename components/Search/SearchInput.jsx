@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { InputBase } from '@material-ui/core';
 
 const SearchInput = ({ search, setSearch, placeholder, ...otherProps }) => {
@@ -10,6 +11,13 @@ const SearchInput = ({ search, setSearch, placeholder, ...otherProps }) => {
       {...otherProps}
     />
   );
+};
+
+SearchInput.propTypes = {
+  search: PropTypes.string,
+  setSearch: PropTypes.func,
+  placeholder: PropTypes.string,
+  otherProps: PropTypes.element,
 };
 
 export default SearchInput;

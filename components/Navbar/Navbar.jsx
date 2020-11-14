@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import {
@@ -25,6 +26,7 @@ import NavbarProfileMenuContainer from '../Navbar/NavbarProfileMenuContainer';
 // Redux Actions
 import LoginForm from '../LoginForm';
 import SearchContainer from '../Search/SearchContainer';
+import ThemeToggleButton from '../ThemeToggleButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +35,11 @@ const useStyles = makeStyles((theme) => ({
   titleText: {
     fontWeight: 400,
     letterSpacing: 2,
-    color: theme.palette.primary.main,
+    color: theme.palette.common.white,
     textTransform: 'uppercase',
+  },
+  button: {
+    color: theme.palette.common.white,
   },
 }));
 
@@ -60,7 +65,7 @@ const Navbar = ({ title }) => {
 
   return (
     <React.Fragment>
-      <AppBar position='fixed' color='inherit' elevation={0}>
+      <AppBar position='fixed' color='secondary' elevation={0}>
         <Container maxWidth='lg'>
           <Toolbar>
             <Link href='/' as='/'>
@@ -82,6 +87,8 @@ const Navbar = ({ title }) => {
               <AuthMenu userAvatar={user.avatar} />
             )}
 
+            <ThemeToggleButton />
+
             <DialogContainer
               open={openLogin}
               handleClose={handleClose}
@@ -99,21 +106,22 @@ const Navbar = ({ title }) => {
 };
 
 const NonAuthMenu = ({ setOpen }) => {
+  const classes = useStyles();
   return (
-    <ButtonGroup variant='text' color='inherit'>
+    <ButtonGroup variant='outlined' color='inherit'>
       <Button
+        className={classes.button}
         startIcon={<ExitToAppOutlined />}
-        color='secondary'
         onClick={setOpen}
       >
         <Typography>Đăng nhập</Typography>
       </Button>
-      <Button startIcon={<PersonAddOutlined />} color='primary'>
-        <Link href='/register'>
-          <a>
-            <Typography color='primary'>Đăng ký</Typography>
-          </a>
-        </Link>
+      <Button
+        className={classes.button}
+        startIcon={<PersonAddOutlined />}
+        onClick={() => Router.push('/register')}
+      >
+        <Typography>Đăng ký</Typography>
       </Button>
     </ButtonGroup>
   );

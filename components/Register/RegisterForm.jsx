@@ -4,8 +4,6 @@ import { Formik, Form, Field } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { DatePicker } from 'formik-material-ui-pickers';
 import { Button } from '@material-ui/core';
-// Config
-import { API_USER_ROUTE } from '../../config/config.json';
 // Redux actions
 import { registerUser } from '../../redux/actions/authActions';
 // Validation
@@ -18,6 +16,7 @@ const RegisterForm = () => {
   return (
     <Formik
       initialValues={{
+        fullName: '',
         username: '',
         email: '',
         password: '',
@@ -39,6 +38,15 @@ const RegisterForm = () => {
     >
       {({ submitForm, isSubmitting }) => (
         <Form>
+          <Field
+            component={TextField}
+            name='fullName'
+            label='Full Name'
+            variant='outlined'
+            margin='dense'
+            fullWidth
+            focused
+          />
           <Field
             component={TextField}
             name='username'

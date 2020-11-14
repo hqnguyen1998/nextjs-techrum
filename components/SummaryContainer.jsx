@@ -1,9 +1,16 @@
-import { Box, Divider, Paper, Typography } from '@material-ui/core';
+import { Box, Divider, makeStyles, Paper, Typography } from '@material-ui/core';
 import { fetcher } from '../src/api-fetcher';
 import React from 'react';
-import theme from '../src/theme';
+
+const useStyles = makeStyles((theme) => ({
+  text: {
+    fontWeight: 600,
+    color: theme.palette.primary.contrastText,
+  },
+}));
 
 const SummaryContainer = () => {
+  const classes = useStyles();
   const [totalPosts, setTotalPosts] = React.useState(null);
   const [users, setUsers] = React.useState([]);
 
@@ -35,35 +42,14 @@ const SummaryContainer = () => {
       <Divider light />
       <div style={{ marginTop: 10 }}>
         <Typography variant='body1' align='center' color='textSecondary'>
-          Bài viết:{' '}
-          <span
-            style={{
-              color: theme.palette.primary.contrastText,
-              fontWeight: 800,
-            }}
-          >
-            {totalPosts}
-          </span>
+          Bài viết: <span className={classes.text}>{totalPosts}</span>
         </Typography>
         <Typography variant='body1' align='center' color='textSecondary'>
-          Thành viên:{' '}
-          <span
-            style={{
-              color: theme.palette.primary.contrastText,
-              fontWeight: 800,
-            }}
-          >
-            {users.length}
-          </span>
+          Thành viên: <span className={classes.text}>{users.length}</span>
         </Typography>
         <Typography variant='body1' align='center' color='textSecondary'>
           Thành viên mới nhất:{' '}
-          <span
-            style={{
-              color: theme.palette.primary.contrastText,
-              fontWeight: 800,
-            }}
-          >
+          <span className={classes.text}>
             {users.length > 0 ? users[users.length - 1].username : ''}
           </span>
         </Typography>

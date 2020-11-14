@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import { Box, Container } from '@material-ui/core';
@@ -29,6 +30,11 @@ const Layout = ({ title, children }) => {
       </Box>
     </React.Fragment>
   );
+};
+
+Layout.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

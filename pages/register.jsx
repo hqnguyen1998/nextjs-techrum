@@ -24,7 +24,7 @@ const Register = () => {
   }, [isAuth]);
 
   return (
-    <Layout title='Đăng ký'>
+    <Layout title='Register'>
       <Typography variant='h5' className={classes.titleText}>
         Register User
       </Typography>

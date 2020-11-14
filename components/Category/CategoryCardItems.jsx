@@ -79,16 +79,38 @@ const CategoryCardItems = ({ data }) => {
               justifyContent: 'space-between',
             }}
           >
-            <div>
-              <Avatar
-                src={posts[posts.length - 1].author.avatar}
-                alt={posts[posts.length - 1].authorusername}
-              />
-            </div>
+            <Link
+              href='/members/[[...slug]]'
+              as={`/members/${posts[posts.length - 1].author.username}/${
+                posts[posts.length - 1].author._id
+              }`}
+            >
+              <a>
+                <Avatar
+                  src={posts[posts.length - 1].author.avatar}
+                  alt={posts[posts.length - 1].authorusername}
+                />
+              </a>
+            </Link>
             <div style={{ width: '80%' }}>
-              <Typography variant='body1' className={classes.cardTitle} noWrap>
-                {posts[posts.length - 1].title}
-              </Typography>
+              <Link
+                href='/posts/[slug]'
+                as={`/posts/${posts[posts.length - 1].slug}.${
+                  posts[posts.length - 1]._id
+                }`}
+              >
+                <a>
+                  <Typography
+                    variant='body1'
+                    className={classes.cardTitle}
+                    color='secondary'
+                    noWrap
+                  >
+                    {posts[posts.length - 1].title}
+                  </Typography>
+                </a>
+              </Link>
+
               <Typography variant='body1' color='textSecondary'>
                 <Moment format='DD/MM/YY'>
                   {posts[posts.length - 1].posted_date}
