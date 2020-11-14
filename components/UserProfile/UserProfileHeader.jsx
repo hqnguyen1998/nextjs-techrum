@@ -1,5 +1,4 @@
 import React from 'react';
-import { fetcher } from '../../src/api-fetcher';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -15,38 +14,9 @@ import {
 } from '@material-ui/core';
 // Redux actions
 import { updateUser } from '../../redux/actions/authActions';
-
 // Components
 import UserProfileAvatar from './UserProfileAvatar';
 import UserProfileBasicInformation from './UserProfileBasicInformation';
-
-const useStyles = makeStyles((theme) => ({
-  avatarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    width: '100%',
-    height: '200px',
-  },
-  avatar: {
-    width: '90%',
-    height: '90%',
-    margin: 'auto',
-    marginBottom: theme.spacing(2),
-    cursor: 'pointer',
-  },
-  usernameText: {
-    textTransform: 'uppercase',
-    fontWeight: 800,
-    [theme.breakpoints.down('xs')]: {
-      textAlign: 'center',
-      marginTop: theme.spacing(2),
-    },
-  },
-  input: {
-    display: 'none',
-  },
-}));
 
 const UserProfileHeader = () => {
   const dispatch = useDispatch();
@@ -56,10 +26,6 @@ const UserProfileHeader = () => {
 
   const inputRef = React.useRef(null);
   const [file, setFile] = React.useState(null);
-
-  function handleAvatar() {
-    inputRef.current.click();
-  }
 
   function handleAvatarInput(e) {
     setFile(e.target.files[0]);
@@ -136,9 +102,23 @@ const UserProfileHeader = () => {
         </Grid>
         <Grid item xs={12} sm={9} md={9}>
           {!isLoading && (
-            <Typography variant='h5' className={classes.usernameText}>
-              {profile.username}
-            </Typography>
+            <React.Fragment>
+              <Typography
+                variant='h5'
+                color='textPrimary'
+                className={classes.usernameText}
+              >
+                {profile.fullName ? profile.fullName : profile.username}
+              </Typography>
+
+              <Typography
+                variant='body2'
+                color='textSecondary'
+                className={classes.usernameText}
+              >
+                {profile.bio}
+              </Typography>
+            </React.Fragment>
           )}
           <br />
           <Divider />
@@ -155,5 +135,33 @@ const UserProfileHeader = () => {
     </Box>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  avatarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    height: '200px',
+  },
+  avatar: {
+    width: '90%',
+    height: '90%',
+    margin: 'auto',
+    marginBottom: theme.spacing(2),
+    cursor: 'pointer',
+  },
+  usernameText: {
+    textTransform: 'uppercase',
+    fontWeight: 800,
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center',
+      marginTop: theme.spacing(2),
+    },
+  },
+  input: {
+    display: 'none',
+  },
+}));
 
 export default UserProfileHeader;

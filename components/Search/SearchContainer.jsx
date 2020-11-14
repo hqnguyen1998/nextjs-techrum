@@ -2,7 +2,7 @@ import React from 'react';
 import Router from 'next/router';
 import SearchButton from './SearchButton';
 import SearchInput from './SearchInput';
-import { Grow } from '@material-ui/core';
+import { Box, Grow } from '@material-ui/core';
 
 const SearchContainer = () => {
   const [open, setOpen] = React.useState(false);
@@ -22,8 +22,16 @@ const SearchContainer = () => {
     setText(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    Router.push(`/search?q=${text}`);
+
+    return;
+  };
+
   return (
-    <React.Fragment>
+    <Box component='form' onSubmit={handleSubmit}>
       <SearchButton onClick={handleSearch} />
       {open && (
         <Grow in={open}>
@@ -35,7 +43,7 @@ const SearchContainer = () => {
           />
         </Grow>
       )}
-    </React.Fragment>
+    </Box>
   );
 };
 

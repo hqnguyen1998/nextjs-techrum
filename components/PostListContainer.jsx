@@ -51,7 +51,7 @@ const PostListContainer = ({ categoryId }) => {
   };
 
   const handleRedirectNewPost = () => {
-    router.push(`${router.asPath}/new`);
+    router.push('/category/[slug]/new', `${router.asPath}/new`);
   };
 
   return (

@@ -1,4 +1,5 @@
 import Moment from 'react-moment';
+import Link from 'next/link';
 import {
   CardHeader,
   Avatar,
@@ -37,7 +38,16 @@ const PostCardHeader = ({ author }) => {
   const classes = useStyles();
   return (
     <CardHeader
-      avatar={<Avatar src={author.avatar} alt={author.username} />}
+      avatar={
+        <Link
+          href='/members/[[...slug]]'
+          as={`/members/${author.username}/${author._id}`}
+        >
+          <a>
+            <Avatar src={author.avatar} alt={author.username} />
+          </a>
+        </Link>
+      }
       action={
         <Hidden xsDown>
           <Box m={1}>
@@ -60,7 +70,18 @@ const PostCardHeader = ({ author }) => {
           </Box>
         </Hidden>
       }
-      title={author.username}
+      title={
+        <Link
+          href='/members/[[...slug]]'
+          as={`/members/${author.username}/${author._id}`}
+        >
+          <a>
+            <Typography variant='h5' color='primary'>
+              {author.username}
+            </Typography>
+          </a>
+        </Link>
+      }
       subheader={
         <div>
           <Typography variant='caption'>{author.email}</Typography>

@@ -16,6 +16,10 @@ handler.get(async (req, res) => {
       .select('-password')
       .populate({
         path: 'posts',
+        populate: {
+          path: 'author',
+          select: '-password',
+        },
       })
       .populate({
         path: 'comments',

@@ -25,7 +25,10 @@ const NavbarProfileMenuListItem = ({ anchorEl, onClose }) => {
   const handleRoute = (value) => {
     switch (value) {
       case 'profile':
-        Router.push(`/members/${user.username}/${user._id}`);
+        Router.push(
+          `/members/[[...slug]]`,
+          `/members/${user.username}/${user._id}`
+        );
         break;
       case 'settings':
         Router.push(`/me/settings`);

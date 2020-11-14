@@ -45,6 +45,10 @@ handler.get(async (req, res) => {
     const user = await User.findById(verifiedToken.id)
       .populate({
         path: 'posts',
+        populate: {
+          path: 'author',
+          select: '-password',
+        },
       })
       .populate({
         path: 'comments',
