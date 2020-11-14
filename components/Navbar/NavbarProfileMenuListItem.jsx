@@ -25,6 +25,9 @@ const NavbarProfileMenuListItem = ({ anchorEl, onClose }) => {
   const handleRoute = (value) => {
     switch (value) {
       case 'profile':
+        Router.push(`/members/${user.username}/${user._id}`);
+        break;
+      case 'settings':
         Router.push(`/me/settings`);
         break;
       default:
@@ -44,7 +47,7 @@ const NavbarProfileMenuListItem = ({ anchorEl, onClose }) => {
       }}
     >
       <MenuItem onClick={() => handleRoute('profile')}>Profile</MenuItem>
-      <MenuItem>Settings</MenuItem>
+      <MenuItem onClick={() => handleRoute('settings')}>Settings</MenuItem>
       <Divider light />
       <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
     </Menu>
