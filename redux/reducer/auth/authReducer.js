@@ -12,6 +12,11 @@ const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case t.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        user: payload,
+      };
     case t.AUTH_USER:
       return {
         ...state,

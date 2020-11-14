@@ -3,11 +3,17 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+  fullName: {
+    type: String,
+  },
   username: {
     type: String,
     trim: true,
     required: [true, 'Username required'],
     unique: [true, 'Username is already existed'],
+  },
+  bio: {
+    type: String,
   },
   email: {
     type: String,

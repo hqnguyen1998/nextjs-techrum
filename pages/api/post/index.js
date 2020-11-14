@@ -52,7 +52,7 @@ handler.put(async (req, res) => {
   if (!req.user) {
     return res.status(401).json({
       success: false,
-      msg: 'Non-Authorization',
+      msg: 'Bạn không có quyền truy cập',
     });
   }
 
@@ -67,7 +67,7 @@ handler.put(async (req, res) => {
     if (existedLike) {
       return res.status(400).json({
         success: false,
-        msg: 'Người dùng đã thích bài viết',
+        msg: 'Người dùng đã thích bài viết trước đó',
       });
     }
 
@@ -129,13 +129,15 @@ handler.post(async (req, res) => {
   if (!user) {
     return res.status(401).json({
       success: false,
-      msg: 'Please login before create a post',
+      msg: 'Hãy đăng nhập trước khi đăng bài mới',
     });
   }
 
+  const body = JSON.parse(req.body);
+
   try {
     const postData = {
-      ...req.body,
+      ...body,
       author: user._id,
     };
 

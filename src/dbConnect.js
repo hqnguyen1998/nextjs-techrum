@@ -3,6 +3,7 @@ import '../models/SubCategory';
 import '../models/Category';
 import '../models/Post';
 import '../models/User';
+import '../models/Comment';
 const uri = process.env.MONGO_URI;
 
 const connection = {}; /* creating connection object*/

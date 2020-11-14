@@ -58,14 +58,14 @@ const NewPost = ({ token, category }) => {
       body: JSON.stringify(postData),
     });
 
-    const { success, data } = await res.json();
+    const { success, msg } = await res.json();
 
     if (success) {
       setTitle('');
       setText('');
     }
 
-    enqueueSnackbar(data.msg, {
+    enqueueSnackbar(msg, {
       variant: success ? 'success' : 'error',
     });
   };

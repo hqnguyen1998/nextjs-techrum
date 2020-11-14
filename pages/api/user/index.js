@@ -4,10 +4,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import gravatar from 'gravatar';
 import middleware from '../../../middlewares/middleware';
+import authJWT from '../../../middlewares/authJWT';
 
 const handler = nextConnect();
 
-handler.use(middleware);
+handler.use(middleware).use(authJWT);
 
 // @URL      /api/user
 // @Method   GET
@@ -75,6 +76,43 @@ handler.post(async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
+    });
+  }
+});
+
+// @URL      /api/user/
+// @Method   PUT
+// @Desc     Update user profile
+handler.put(async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      msg: 'Non-Authorization',
+    });
+  }
+
+  try {
+    // console.log(req.body);
+    const newUserInfo = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    })
+      .populate({
+        path: 'posts',
+      })
+      .populate({
+        path: 'comments',
+      })
+      .select('-password');
+
+    res.status(200).json({
+      success: true,
+      msg: 'Cập nhật thông tin thành công',
+      data: newUserInfo,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      msg: 'Cập nhật thông tin không thành công',
     });
   }
 });

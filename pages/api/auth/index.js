@@ -42,7 +42,14 @@ handler.get(async (req, res) => {
     }
 
     // Get user Information
-    const user = await User.findById(verifiedToken.id);
+    const user = await User.findById(verifiedToken.id)
+      .populate({
+        path: 'posts',
+      })
+      .populate({
+        path: 'comments',
+      })
+      .select('-password');
 
     res.status(200).json({
       success: true,

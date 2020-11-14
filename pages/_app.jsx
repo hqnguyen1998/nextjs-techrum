@@ -1,11 +1,12 @@
 import React from 'react';
 import cookies from 'next-cookies';
-import fetch from 'isomorphic-unfetch';
+import { fetcher } from '../src/api-fetcher';
 import MomentUtils from '@date-io/moment';
+import theme from '../src/theme';
 import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
-import theme from '../src/theme';
+// Components
 import Navbar from '../components/Navbar/Navbar';
 // Redux Store
 import { wrapper } from '../redux/store';
@@ -13,7 +14,6 @@ import { authUser } from '../redux/actions/authActions';
 import { fetchPageConfig } from '../redux/actions/configActions';
 // Global Css
 import '../styles/globals.css';
-import Layout from '../layouts/Layout';
 
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
@@ -39,18 +39,21 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { token } = cookies(ctx);
-  const authRes = await fetch(`${process.env.API_URI}/api/auth`, {
-    headers: {
-      authorization: token,
-    },
-  });
-  const configRes = await fetch(`${process.env.API_URI}/api/config`);
 
-  const authData = await authRes.json();
-  const { data } = await configRes.json();
+  if (token) {
+    const auth = await fetcher(`${process.env.API_URI}/api/auth`, {
+      method: 'GET',
+      headers: {
+        authorization: token,
+      },
+    });
 
-  ctx.store.dispatch(fetchPageConfig(data));
-  ctx.store.dispatch(authUser(authData));
+    ctx.store.dispatch(authUser(auth));
+  }
+
+  const config = await fetcher(`${process.env.API_URI}/api/config`);
+
+  ctx.store.dispatch(fetchPageConfig(config.data));
 
   return {
     pageProps: {

@@ -6,6 +6,7 @@ import {
   Avatar,
   Typography,
   makeStyles,
+  IconButton,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +25,16 @@ const PostListItem = ({ post }) => {
   return (
     <TableRow key={post._id}>
       <TableCell>
-        <Avatar src={post.author.avatar} alt={post.author.username} />
+        <IconButton size='small'>
+          <Link
+            href='/members/[[...slug]]'
+            as={`/members/${post.author.username}/${post.author._id}`}
+          >
+            <a>
+              <Avatar src={post.author.avatar} alt={post.author.username} />
+            </a>
+          </Link>
+        </IconButton>
       </TableCell>
       <TableCell>
         <Link href='/posts/[slug]' as={`/posts/${post.slug}.${post._id}`}>

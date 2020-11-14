@@ -11,7 +11,6 @@ import {
   Button,
   DialogContent,
   IconButton,
-  Avatar,
 } from '@material-ui/core';
 import {
   ExitToAppOutlined,
@@ -22,8 +21,8 @@ import {
 
 // Components
 import DialogContainer from '../DialogContainer';
+import NavbarProfileMenuContainer from '../Navbar/NavbarProfileMenuContainer';
 // Redux Actions
-import { signOut } from '../../redux/actions/authActions';
 import LoginForm from '../LoginForm';
 import SearchContainer from '../Search/SearchContainer';
 
@@ -40,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = ({ title }) => {
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   const { isAuth, user } = useSelector((state) => state.auth);
@@ -58,10 +56,6 @@ const Navbar = ({ title }) => {
 
   const handleClose = () => {
     setOpenLogin(false);
-  };
-
-  const handleSignOut = () => {
-    dispatch(signOut());
   };
 
   return (
@@ -85,7 +79,7 @@ const Navbar = ({ title }) => {
             {!isAuth ? (
               <NonAuthMenu setOpen={handleOpen} />
             ) : (
-              <AuthMenu userAvatar={user.avatar} signOut={handleSignOut} />
+              <AuthMenu userAvatar={user.avatar} />
             )}
 
             <DialogContainer
@@ -125,20 +119,15 @@ const NonAuthMenu = ({ setOpen }) => {
   );
 };
 
-const AuthMenu = ({ userAvatar, signOut }) => {
+const AuthMenu = ({ userAvatar }) => {
   return (
     <React.Fragment>
-      <IconButton>
-        <Avatar src={userAvatar} style={{ width: '30px', height: '30px' }} />
-      </IconButton>
+      <NavbarProfileMenuContainer avatar={userAvatar} />
       <IconButton>
         <MailOutline />
       </IconButton>
       <IconButton color='primary'>
         <NotificationsOutlined />
-      </IconButton>
-      <IconButton onClick={signOut}>
-        <ExitToAppOutlined />
       </IconButton>
     </React.Fragment>
   );

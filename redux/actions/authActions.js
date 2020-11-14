@@ -1,6 +1,30 @@
+import { fetcher } from '../../src/api-fetcher';
 import * as t from '../reducer/auth/authTypes';
-import fetch from 'isomorphic-unfetch';
 import Cookie from 'js-cookie';
+
+export const updateUser = ({ token, data }) => async (dispatch) => {
+  const response = await fetcher(`${process.env.API_URI}/api/user`, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+      authorization: token,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.success) {
+    dispatch({
+      type: t.UPDATE_USER_UNSUCCESS,
+    });
+  }
+
+  dispatch({
+    type: t.UPDATE_USER_SUCCESS,
+    payload: response.data,
+  });
+
+  return response;
+};
 
 export const authUser = (data) => async (dispatch) => {
   if (!data.success) {
