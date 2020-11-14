@@ -1,7 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import cookies from 'next-cookies';
-import { PersistGate } from 'redux-persist/integration/react';
-import { useSelector, useStore } from 'react-redux';
 import { fetcher } from '../src/api-fetcher';
 import MomentUtils from '@date-io/moment';
 import { SnackbarProvider } from 'notistack';
@@ -19,8 +18,8 @@ import { fetchPageConfig } from '../redux/actions/configActions';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
-  const store = useStore((state) => state);
-  const config = useSelector((state) => state.config);
+  const x = useSelector((state) => state.config.theme);
+
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -30,17 +29,15 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
-      <ThemeProvider theme={theme('dark')}>
-        <CssBaseline />
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <SnackbarProvider maxSnack={3}>
-            <Navbar title='Techrum' />
-            <Component {...pageProps} />
-          </SnackbarProvider>
-        </MuiPickersUtilsProvider>
-      </ThemeProvider>
-    </PersistGate>
+    <ThemeProvider theme={theme(x)}>
+      <CssBaseline />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <SnackbarProvider maxSnack={3}>
+          <Navbar title='Techrum' />
+          <Component {...pageProps} />
+        </SnackbarProvider>
+      </MuiPickersUtilsProvider>
+    </ThemeProvider>
   );
 }
 
