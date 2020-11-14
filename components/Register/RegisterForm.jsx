@@ -29,24 +29,11 @@ const RegisterForm = () => {
         setTimeout(async () => {
           setSubmitting(false);
 
-          const response = await fetch(
-            `${process.env.API_URI}${API_USER_ROUTE}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-type': 'application/json',
-              },
-              body: JSON.stringify(values),
-            }
-          );
-
-          const data = await response.json();
+          const data = await dispatch(registerUser(values));
 
           enqueueSnackbar(data.msg, {
             variant: data.success ? 'success' : 'error',
           });
-
-          dispatch(registerUser(data));
         }, 500);
       }}
     >

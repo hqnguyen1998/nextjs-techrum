@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   avatar: {
     width: '75px',
@@ -26,55 +27,84 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  infoContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  infoText: {
+    textTransform: 'capitalize',
+    color: theme.palette.primary.contrastText,
+    fontWeight: 600,
+  },
 }));
 
-const CommentListItem = ({ comment }) => {
+const CommentListItem = ({
+  comment: {
+    author: {
+      avatar,
+      username,
+      bio,
+      fullName,
+      email,
+      joined_date,
+      comments,
+      posts,
+    },
+    body,
+  },
+}) => {
   const classes = useStyles();
   return (
-    <Box key={comment._id} component={Paper} mt={2} p={2}>
+    <Box component={Paper} mt={2} p={2}>
       <Grid container spacing={1}>
         <Grid item xs={12} md={2} className={classes.root}>
           <Avatar
             variant='square'
-            src={comment.author.avatar}
-            alt={comment.author.username}
+            src={avatar}
+            alt={username}
             className={classes.avatar}
           />
 
-          <Typography variant='h6'>{comment.author.username}</Typography>
-          <Typography variant='caption' color='textSecondary'>
-            {comment.author.email}
+          <Typography variant='h6' className={classes.infoText}>
+            {fullName ? fullName : username}
           </Typography>
-          <br />
-          <div>
-            <Typography variant='caption' color='textSecondary'>
-              Ngày Tham gia:{' '}
-              <span style={{ color: '#fff', fontWeight: 600 }}>
-                <Moment format='MM/DD/YYYY'>
-                  {comment.author.joined_date}
-                </Moment>
-              </span>
-            </Typography>
-          </div>
-          <div>
-            <Typography variant='caption' color='textSecondary'>
-              Bình luận:{' '}
-              <span style={{ color: '#fff', fontWeight: 600 }}>
-                {comment.author.comments.length}
-              </span>
-            </Typography>
-          </div>
-          <div>
-            <Typography variant='caption' color='textSecondary'>
-              Bài viết:{' '}
-              <span style={{ color: '#fff', fontWeight: 600 }}>
-                {comment.author.posts.length}
-              </span>
-            </Typography>
-          </div>
+          <Typography variant='caption' color='textSecondary'>
+            {email}
+          </Typography>
+
+          <Box mt={2} className={classes.infoContainer}>
+            <div>
+              <Typography variant='caption' color='textSecondary'>
+                Ngày Tham gia:{' '}
+                <span className={classes.infoText}>
+                  <Moment format='MM/DD/YYYY'>{joined_date}</Moment>
+                </span>
+              </Typography>
+            </div>
+            <div>
+              <Typography variant='caption' color='textSecondary'>
+                Bình luận:{' '}
+                <span className={classes.infoText}>{comments.length}</span>
+              </Typography>
+            </div>
+            <div>
+              <Typography variant='caption' color='textSecondary'>
+                Bài viết:{' '}
+                <span className={classes.infoText}>{posts.length}</span>
+              </Typography>
+            </div>
+            {bio && (
+              <div>
+                <Typography variant='caption' color='textSecondary'>
+                  Bio: <span className={classes.infoText}>{bio}</span>
+                </Typography>
+              </div>
+            )}
+          </Box>
         </Grid>
         <Grid item xs={12} md={10}>
-          <div dangerouslySetInnerHTML={{ __html: comment.body }} />
+          <div dangerouslySetInnerHTML={{ __html: body }} />
         </Grid>
       </Grid>
     </Box>

@@ -1,5 +1,6 @@
 import { fetcher } from '../../src/api-fetcher';
 import * as t from '../reducer/auth/authTypes';
+import { API_USER_ROUTE } from '../../config/config.json';
 import Cookie from 'js-cookie';
 
 export const updateUser = ({ token, data }) => async (dispatch) => {
@@ -59,22 +60,33 @@ export const loginUser = (data) => async (dispatch) => {
 };
 
 export const registerUser = (data) => async (dispatch) => {
-  if (!data.success) {
+  const response = await fetcher(`${process.env.API_URI}${API_USER_ROUTE}`, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.success) {
     Cookie.remove('token');
 
-    return dispatch({
-      type: t.REGISTER_FAILED,
-      payload: data,
-    });
-  } else {
-    // Set Cookie
-    Cookie.set('token', data.token);
-
     dispatch({
-      type: t.REGISTER_SUCCESS,
-      payload: data,
+      type: t.REGISTER_FAILED,
+      payload: response,
     });
+
+    return response;
   }
+
+  Cookie.set('token', response.token);
+
+  dispatch({
+    type: t.REGISTER_SUCCESS,
+    payload: response,
+  });
+
+  return response;
 };
 
 export const signOut = () => (dispatch) => {
