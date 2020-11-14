@@ -29,11 +29,9 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  const getTheme = theme(config.theme || 'dark');
-
   return (
     <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
-      <ThemeProvider theme={getTheme}>
+      <ThemeProvider theme={theme('dark')}>
         <CssBaseline />
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <SnackbarProvider maxSnack={3}>
