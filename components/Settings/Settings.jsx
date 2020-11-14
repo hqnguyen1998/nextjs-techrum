@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  InputBase,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Box, Divider, makeStyles, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 import SettingInputContainer from './SettingInputContainer';
 

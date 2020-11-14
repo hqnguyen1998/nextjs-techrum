@@ -23,10 +23,10 @@ const SettingInputContainer = ({
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, isAuth } = useSelector((state) => state.auth);
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState({
-    [name]: user[name] || '',
+    [name]: isAuth ? user[name] : '',
   });
 
   const handleChange = (e) => {
