@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  const getTheme = theme(config.theme);
+  const getTheme = theme(config.theme || 'dark');
 
   return (
     <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
