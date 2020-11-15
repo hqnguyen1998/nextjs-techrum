@@ -1,5 +1,6 @@
 import { Box, Divider, makeStyles, Paper, Typography } from '@material-ui/core';
 import { fetcher } from '../src/api-fetcher';
+import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SummaryContainer = () => {
   const classes = useStyles();
+  const [loading, setLoading] = React.useState(true);
   const [totalPosts, setTotalPosts] = React.useState(null);
   const [users, setUsers] = React.useState([]);
 
@@ -18,6 +20,10 @@ const SummaryContainer = () => {
     const dataFetching = async () => {
       const posts = await fetcher(`${process.env.API_URI}/api/post`);
       const users = await fetcher(`${process.env.API_URI}/api/user`);
+
+      if (posts.success && users.success) {
+        setLoading(false);
+      }
 
       setUsers(users.data);
 
@@ -27,7 +33,7 @@ const SummaryContainer = () => {
     dataFetching();
   }, []);
 
-  return (
+  return !loading ? (
     <Box component={Paper}>
       <div style={{ padding: 10 }}>
         <Typography
@@ -56,6 +62,8 @@ const SummaryContainer = () => {
       </div>
       <br />
     </Box>
+  ) : (
+    <Skeleton variant='rect' height={150} />
   );
 };
 

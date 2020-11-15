@@ -129,12 +129,12 @@ const AuthMenu = ({ userAvatar }) => {
   return (
     <React.Fragment>
       <NavbarProfileMenuContainer avatar={userAvatar} />
-      <IconButton className={classes.button}>
+      {/* <IconButton className={classes.button}>
         <MailOutline />
       </IconButton>
       <IconButton className={classes.button}>
         <NotificationsOutlined />
-      </IconButton>
+      </IconButton> */}
     </React.Fragment>
   );
 };

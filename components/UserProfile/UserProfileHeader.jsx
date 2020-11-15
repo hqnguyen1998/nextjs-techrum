@@ -1,66 +1,20 @@
 import React from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {
   Box,
-  Button,
   Divider,
   Grid,
   makeStyles,
   Paper,
-  TextField,
   Typography,
 } from '@material-ui/core';
-// Redux actions
-import { updateUser } from '../../redux/actions/authActions';
 // Components
 import UserProfileAvatar from './UserProfileAvatar';
 import UserProfileBasicInformation from './UserProfileBasicInformation';
 
 const UserProfileHeader = () => {
-  const dispatch = useDispatch();
   const classes = useStyles();
-  const { token } = useSelector((state) => state.auth);
   const { profile, isLoading } = useSelector((state) => state.member);
-
-  const inputRef = React.useRef(null);
-  const [file, setFile] = React.useState(null);
-
-  function handleAvatarInput(e) {
-    setFile(e.target.files[0]);
-  }
-
-  const handleChangeAvatar = async () => {
-    let data = new FormData();
-
-    data.append('image', file);
-
-    axios({
-      url:
-        'https://api.imgbb.com/1/upload?key=a22cb8b9db6f05965dc8c4560f0b0f76',
-      method: 'POST',
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-      data: data,
-    }).then(async (res) => {
-      const { data } = await axios({
-        method: 'PUT',
-        url: `${process.env.API_URI}/api/user`,
-        headers: {
-          Authorization: token,
-        },
-        data: {
-          avatar: res.data.data.url,
-        },
-      });
-
-      setFile(null);
-
-      dispatch(updateUser(data.data));
-    });
-  };
 
   return (
     <Box component={Paper} p={2}>
@@ -75,30 +29,6 @@ const UserProfileHeader = () => {
               />
             )}
           </div>
-          <React.Fragment>
-            {file && (
-              <div style={{ width: '100%', overflow: 'hidden' }}>
-                <Typography variant='caption' noWrap>
-                  {file.name}
-                </Typography>
-                <Button
-                  onClick={handleChangeAvatar}
-                  variant='contained'
-                  color='secondary'
-                  fullWidth
-                >
-                  Thay đổi
-                </Button>
-              </div>
-            )}
-            <TextField
-              inputRef={inputRef}
-              type='file'
-              inputProps={{ accept: 'image/*' }}
-              onChange={handleAvatarInput}
-              style={{ display: 'none' }}
-            />
-          </React.Fragment>
         </Grid>
         <Grid item xs={12} sm={9} md={9}>
           {!isLoading && (
@@ -150,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     marginBottom: theme.spacing(2),
     cursor: 'pointer',
+    '&:hover': {
+      opacity: 0.8,
+    },
   },
   usernameText: {
     textTransform: 'uppercase',
@@ -157,6 +90,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
       marginTop: theme.spacing(2),
+    },
+    '&:hover': {
+      color: theme.palette.secondary.main,
     },
   },
   input: {
