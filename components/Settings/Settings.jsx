@@ -1,4 +1,11 @@
-import { Box, Divider, makeStyles, Paper, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Divider,
+  makeStyles,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import React from 'react';
 import SettingInputContainer from './SettingInputContainer';
 
@@ -34,6 +41,7 @@ const Settings = () => {
         name='bio'
         placeholder='Add your bio'
       />
+      <SettingInputContainer title='Avatar' name='avatar' type='file' />
     </Box>
   );
 };
