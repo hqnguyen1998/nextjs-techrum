@@ -4,5 +4,7 @@
     "API_POST_ROUTE": "/api/post",
     "API_SUBCATEGORY_ROUTE": "/api/subcategory",
     "API_USER_ROUTE": "/api/user",
+    "API_AUTH_ROUTE": "/api/auth",
+    "API_CONFIG_ROUTE": "/api/config",
     "IMGBB_SECRET_KEY": "a22cb8b9db6f05965dc8c4560f0b0f76"
 }

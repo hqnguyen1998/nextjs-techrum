@@ -1,4 +1,5 @@
 import * as t from './authTypes';
+import { HYDRATE } from 'next-redux-wrapper';
 
 const initialState = {
   token: null,
@@ -12,6 +13,9 @@ const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case HYDRATE:
+      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
+      return { ...state, ...payload };
     case t.UPDATE_USER_SUCCESS:
       return {
         ...state,
@@ -24,10 +28,6 @@ const authReducer = (state = initialState, action) => {
         isAuth: payload.success,
         isLoading: false,
         user: payload.data,
-        error: {
-          msg: 'Login Success',
-          success: true,
-        },
       };
     case t.REGISTER_SUCCESS:
     case t.LOGIN_SUCCESS:

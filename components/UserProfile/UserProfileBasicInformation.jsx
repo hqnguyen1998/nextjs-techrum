@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-evenly',
   },
   text: {
-    color: '#333',
+    color: theme.palette.primary.contrastText,
     fontWeight: 800,
   },
 }));

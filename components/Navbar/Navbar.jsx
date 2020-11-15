@@ -26,7 +26,6 @@ import NavbarProfileMenuContainer from '../Navbar/NavbarProfileMenuContainer';
 // Redux Actions
 import LoginForm from '../LoginForm';
 import SearchContainer from '../Search/SearchContainer';
-import ThemeToggleButton from '../ThemeToggleButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,8 +86,6 @@ const Navbar = ({ title }) => {
               <AuthMenu userAvatar={user.avatar} />
             )}
 
-            <ThemeToggleButton />
-
             <DialogContainer
               open={openLogin}
               handleClose={handleClose}
@@ -128,13 +125,14 @@ const NonAuthMenu = ({ setOpen }) => {
 };
 
 const AuthMenu = ({ userAvatar }) => {
+  const classes = useStyles();
   return (
     <React.Fragment>
       <NavbarProfileMenuContainer avatar={userAvatar} />
-      <IconButton>
+      <IconButton className={classes.button}>
         <MailOutline />
       </IconButton>
-      <IconButton color='primary'>
+      <IconButton className={classes.button}>
         <NotificationsOutlined />
       </IconButton>
     </React.Fragment>

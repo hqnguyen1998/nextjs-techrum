@@ -1,17 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import cookies from 'next-cookies';
-import { fetcher } from '../src/api-fetcher';
 import MomentUtils from '@date-io/moment';
+import { useSelector } from 'react-redux';
 import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import { fetcher } from '../src/api-fetcher';
 
+// Config
+import { API_AUTH_ROUTE, API_CONFIG_ROUTE } from '../config/config.json';
 import theme from '../src/theme';
 // Components
 import Navbar from '../components/Navbar/Navbar';
 // Redux Store
 import { wrapper } from '../redux/store';
+// import { wrapper } from '../redux/store';
 import { authUser } from '../redux/actions/authActions';
 import { fetchPageConfig } from '../redux/actions/configActions';
 // Global Css
@@ -19,6 +22,7 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   const x = useSelector((state) => state.config.theme);
+  const title = useSelector((state) => state.config.config.pageTitle);
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -33,7 +37,7 @@ function MyApp({ Component, pageProps }) {
       <CssBaseline />
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <SnackbarProvider maxSnack={3}>
-          <Navbar title='Techrum' />
+          <Navbar title={title} />
           <Component {...pageProps} />
         </SnackbarProvider>
       </MuiPickersUtilsProvider>
@@ -44,20 +48,16 @@ function MyApp({ Component, pageProps }) {
 MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { token } = cookies(ctx);
 
-  if (token) {
-    const auth = await fetcher(`${process.env.API_URI}/api/auth`, {
-      method: 'GET',
-      headers: {
-        authorization: token,
-      },
-    });
-
-    ctx.store.dispatch(authUser(auth));
-  }
-
-  const config = await fetcher(`${process.env.API_URI}/api/config`);
+  const auth = await fetcher(`${process.env.API_URI}${API_AUTH_ROUTE}`, {
+    method: 'GET',
+    headers: {
+      authorization: token,
+    },
+  });
+  const config = await fetcher(`${process.env.API_URI}${API_CONFIG_ROUTE}`);
 
   ctx.store.dispatch(fetchPageConfig(config.data));
+  ctx.store.dispatch(authUser(auth));
 
   return {
     pageProps: {

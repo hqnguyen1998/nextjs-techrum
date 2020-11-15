@@ -1,6 +1,4 @@
-import { fetcher } from '../../src/api-fetcher';
-// config
-import { API_USER_ROUTE } from '../../config/config.json';
+import React from 'react';
 // Redux actions
 import { wrapper } from '../../redux/store';
 import { fetchMemberProfile } from '../../redux/actions/memberActions';
@@ -8,9 +6,9 @@ import { fetchMemberProfile } from '../../redux/actions/memberActions';
 import Layout from '../../layouts/Layout';
 import UserProfileContainer from '../../components/UserProfile/UserProfileContainer';
 
-const ProfilePage = ({ username }) => {
+const ProfilePage = ({ data }) => {
   return (
-    <Layout title={username}>
+    <Layout title={data.username}>
       <UserProfileContainer />
     </Layout>
   );
@@ -18,9 +16,7 @@ const ProfilePage = ({ username }) => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ params: { slug }, store }) => {
-    const { success, data } = await fetcher(
-      `${process.env.API_URI}${API_USER_ROUTE}/${slug[1]}`
-    );
+    const { success, data } = await store.dispatch(fetchMemberProfile(slug[1]));
 
     if (!success || data.username !== slug[0] || slug.length !== 2) {
       return {
@@ -31,12 +27,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
-    store.dispatch(fetchMemberProfile(data));
-
     return {
       props: {
-        username: data.username,
-        id: data._id,
+        data: data,
       },
     };
   }
