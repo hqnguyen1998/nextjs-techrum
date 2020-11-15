@@ -27,4 +27,4 @@ const makeStore = (context) => {
   return createStore(reducer, bindMiddleware([thunkMiddleware]));
 };
 
-export const wrapper = createWrapper(makeStore, { debug: true });
+export const wrapper = createWrapper(makeStore, { debug: false });

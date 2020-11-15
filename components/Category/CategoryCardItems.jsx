@@ -16,7 +16,6 @@ import {
 const useStyles = makeStyles((theme) => ({
   card: {
     width: '100%',
-    height: '365px',
   },
   cardImage: {
     height: 160,
@@ -72,7 +71,7 @@ const CategoryCardItems = ({ data }) => {
       {posts.length > 0 && (
         <CardActions>
           <Box
-            p={2}
+            p={1}
             style={{
               display: 'flex',
               width: '100%',

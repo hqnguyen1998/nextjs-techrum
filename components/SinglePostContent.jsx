@@ -1,11 +1,19 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
-import fetch from 'isomorphic-unfetch';
-import { Card, CardContent, CardActions, IconButton } from '@material-ui/core';
+import { fetcher } from '../src/api-fetcher';
+import {
+  Card,
+  CardContent,
+  CardActions,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
+// HTML Parser
 import parser from 'html-react-parser';
-
+// Config
+import { API_POST_ROUTE } from '../config/config.json';
 // Components
 import PostCardHeader from '../components/PostCardHeader';
 
@@ -16,13 +24,15 @@ const SinglePostContent = ({ author, content, likes, pid }) => {
   const filterLike = isAuth && likes.filter((like) => like === user._id).length;
 
   const likePost = async (value) => {
-    const response = await fetch(`${process.env.API_URI}/api/post?pid=${pid}`, {
-      method: value === 'like' ? 'PUT' : 'DELETE',
-      headers: {
-        Authorization: token,
-      },
-    });
-    const data = await response.json();
+    const data = await fetcher(
+      `${process.env.API_URI}${API_POST_ROUTE}?pid=${pid}`,
+      {
+        method: value === 'like' ? 'PUT' : 'DELETE',
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
     enqueueSnackbar(data.msg, {
       variant: data.success ? 'success' : 'error',
@@ -39,23 +49,16 @@ const SinglePostContent = ({ author, content, likes, pid }) => {
           justifyContent: 'flex-end',
         }}
       >
-        {filterLike ? (
+        <React.Fragment>
           <IconButton
             color='primary'
-            onClick={() => likePost('unlike')}
+            onClick={() => likePost(filterLike ? 'unlike' : 'like')}
             disabled={isAuth ? false : true}
           >
-            <Favorite />
+            {filterLike ? <Favorite /> : <FavoriteBorder />}
+            <Typography variant='body1'>+{likes.length}</Typography>
           </IconButton>
-        ) : (
-          <IconButton
-            color='primary'
-            onClick={() => likePost('like')}
-            disabled={isAuth ? false : true}
-          >
-            <FavoriteBorder />
-          </IconButton>
-        )}
+        </React.Fragment>
       </CardActions>
     </Card>
   );
